@@ -26,35 +26,54 @@
     pointer-events: none;
     box-shadow: 0 4px 30px rgba(0,0,0,0.3);
   }
-  #player-stats { top: 12px; left: 50%; transform: translateX(-50%); padding: 8px 20px; min-width: 200px; font-size: 10px; text-align: center; }
-  #player-stats .stat { display: flex; justify-content: center; align-items: center; padding: 1px 0; gap: 12px; flex-wrap: wrap; }
-  #player-stats .label { color: rgba(200, 170, 110, 0.5); font-size: 8px; text-transform: uppercase; letter-spacing: 0.8px; }
-  #player-stats .value { color: #e8d5a8; font-size: 10px; font-weight: 500; }
-  #player-stats .value.kills { color: #2ecc71; }
-  #player-stats .value.deaths { color: #e74c3c; }
-  #player-stats .value.level { color: #f1c40f; }
-  #player-stats .value.money { color: #f1c40f; font-weight: 700; }
-  .bar { width: 100%; background: rgba(200, 170, 110, 0.08); border-radius: 4px; overflow: hidden; margin: 4px 0; }
-  #hp-bar { height: 5px; }
-  #exp-bar { height: 3px; }
-  .bar .fill { height: 100%; width: 100%; border-radius: 4px; transition: width 0.2s ease; background: linear-gradient(90deg, #27ae60, #2ecc71); }
-  .bar .fill.medium { background: linear-gradient(90deg, #f39c12, #f1c40f); }
-  .bar .fill.low { background: linear-gradient(90deg, #c0392b, #e74c3c); animation: pulse 0.5s infinite alternate; }
+
+  /* Panel superior */
+  #top-panel {
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 20px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    font-size: 10px;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  #top-panel .wave { color: #f1c40f; font-weight: 700; }
+  #top-panel .nexus-blue { color: #5dade2; }
+  #top-panel .nexus-red { color: #ec7063; }
+
+  /* Panel de estadísticas */
+  #player-stats {
+    top: 60px;
+    left: 12px;
+    padding: 8px 14px;
+    min-width: 130px;
+    font-size: 9px;
+    pointer-events: none;
+  }
+  #player-stats .stat-row { display: flex; justify-content: space-between; padding: 1px 0; gap: 8px; }
+  #player-stats .stat-label { color: rgba(200,170,110,0.3); font-size: 7px; text-transform: uppercase; letter-spacing: 0.5px; }
+  #player-stats .stat-value { color: #e8d5a8; font-size: 9px; font-weight: 500; }
+  #player-stats .stat-value.money { color: #f1c40f; font-weight: 700; }
+  #player-stats .stat-value.level { color: #f1c40f; }
+  #player-stats .stat-value.kills { color: #2ecc71; }
+  #player-stats .stat-value.deaths { color: #e74c3c; }
+  #player-stats .hp-text { color: #2ecc71; }
+  #player-stats .hp-text.low { color: #e74c3c; }
+  #player-stats .hp-text.medium { color: #f1c40f; }
+  #player-stats .bar-container { width: 100%; background: rgba(200,170,110,0.08); border-radius: 3px; overflow: hidden; margin: 2px 0; height: 4px; }
+  #player-stats .bar-fill { height: 100%; border-radius: 3px; transition: width 0.2s ease; background: #2ecc71; }
+  #player-stats .bar-fill.medium { background: #f1c40f; }
+  #player-stats .bar-fill.low { background: #e74c3c; animation: pulse 0.5s infinite alternate; }
   @keyframes pulse { 0% { opacity: 0.7; } 100% { opacity: 1; } }
-  #exp-fill { background: linear-gradient(90deg, #f39c12, #f1c40f); width: 0%; }
-  .hp-text { color: #2ecc71; }
-  .hp-text.medium { color: #f1c40f; }
-  .hp-text.low { color: #e74c3c; }
+  #player-stats .exp-fill { background: linear-gradient(90deg, #f39c12, #f1c40f); }
 
-  #wave-info { top: 12px; left: 12px; padding: 4px 14px; font-size: 10px; }
-  #nexus-info { top: 44px; left: 12px; padding: 4px 14px; font-size: 9px; display: flex; gap: 16px; }
-  #nexus-info .blue { color: #5dade2; }
-  #nexus-info .red { color: #ec7063; }
-
-  #cooldown-bar { bottom: 22px; left: 50%; transform: translateX(-50%); padding: 4px 18px; font-size: 10px; text-align: center; min-width: 100px; letter-spacing: 0.5px; z-index: 15; }
+  #cooldown-bar { bottom: 22px; left: 50%; transform: translateX(-50%); padding: 4px 18px; font-size: 10px; text-align: center; min-width: 100px; z-index: 15; }
   #cooldown-bar .cd-fill { color: #2ecc71; font-weight: 600; }
-  #fps-counter { bottom: 22px; right: 16px; padding: 4px 12px; font-size: 9px; color: rgba(200, 170, 110, 0.3); }
-  #minimap { bottom: 16px; left: 16px; width: 160px; height: 100px; overflow: hidden; padding: 0; border-radius: 8px; border-color: rgba(200, 170, 110, 0.06); }
+  #fps-counter { bottom: 22px; right: 16px; padding: 4px 12px; font-size: 9px; color: rgba(200,170,110,0.3); }
+  #minimap { bottom: 16px; left: 16px; width: 160px; height: 100px; overflow: hidden; padding: 0; border-radius: 8px; border-color: rgba(200,170,110,0.06); }
   #minimap canvas { width: 100%; height: 100%; display: block; }
 
   #shop {
@@ -64,104 +83,60 @@
     transform: translateX(-50%);
     z-index: 15;
     display: none;
-    gap: 8px;
+    gap: 6px;
     pointer-events: all;
-    background: rgba(8, 8, 16, 0.92);
+    background: rgba(8,8,16,0.92);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(200, 170, 110, 0.2);
+    border: 1px solid rgba(200,170,110,0.2);
     border-radius: 12px;
-    padding: 10px 16px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    padding: 8px 14px;
     flex-wrap: wrap;
     justify-content: center;
   }
   #shop.active { display: flex; }
-  #shop .shop-title {
-    color: #f0e6d2;
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 0 10px 0 0;
-    border-right: 1px solid rgba(200,170,110,0.15);
-    display: flex;
-    align-items: center;
-  }
+  #shop .shop-title { color: #f0e6d2; font-size: 8px; text-transform: uppercase; letter-spacing: 1px; padding-right: 10px; border-right: 1px solid rgba(200,170,110,0.15); display: flex; align-items: center; }
   #shop button {
-    background: rgba(200, 170, 110, 0.08);
-    border: 1px solid rgba(200, 170, 110, 0.15);
+    background: rgba(200,170,110,0.08);
+    border: 1px solid rgba(200,170,110,0.15);
     border-radius: 6px;
     color: #c8aa6e;
-    padding: 4px 12px;
+    padding: 3px 10px;
     font-family: inherit;
-    font-size: 9px;
+    font-size: 8px;
     cursor: pointer;
     transition: all 0.2s;
     pointer-events: all;
     white-space: nowrap;
   }
-  #shop button:hover {
-    background: rgba(200, 170, 110, 0.2);
-    color: #f0e6d2;
-    transform: scale(1.05);
-  }
-  #shop button:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-    transform: none;
-  }
+  #shop button:hover { background: rgba(200,170,110,0.2); color: #f0e6d2; transform: scale(1.05); }
+  #shop button:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
   #shop button .cost { color: #f1c40f; font-weight: 700; }
-  #shop button .level-badge { 
-    background: rgba(200,170,110,0.1); 
-    border-radius: 4px;
-    padding: 0 6px;
-    font-size: 8px;
-    margin-left: 4px;
-  }
-  #shop .shop-close {
-    background: rgba(231,76,60,0.15);
-    border-color: rgba(231,76,60,0.2);
-    color: #e74c3c;
-    padding: 4px 8px;
-  }
-  #shop .shop-close:hover {
-    background: rgba(231,76,60,0.25);
-  }
-  #shop-notification {
-    position: absolute;
-    bottom: 120px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 14;
-    color: #2ecc71;
-    font-size: 11px;
-    font-weight: 600;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    pointer-events: none;
-    background: rgba(0,0,0,0.5);
-    padding: 2px 12px;
-    border-radius: 6px;
-  }
+  #shop .shop-close { background: rgba(231,76,60,0.15); border-color: rgba(231,76,60,0.2); color: #e74c3c; padding: 3px 8px; }
+  #shop .shop-close:hover { background: rgba(231,76,60,0.25); }
+  #shop-notification { position: absolute; bottom: 120px; left: 50%; transform: translateX(-50%); z-index: 14; color: #2ecc71; font-size: 11px; font-weight: 600; opacity: 0; transition: opacity 0.5s ease; pointer-events: none; background: rgba(0,0,0,0.5); padding: 2px 12px; border-radius: 6px; }
   #shop-notification.show { opacity: 1; }
 
   #options { position: absolute; top: 12px; right: 12px; display: flex; gap: 6px; z-index: 20; }
   #options button {
-    color: rgba(200, 170, 110, 0.6);
-    background: rgba(8, 8, 16, 0.75);
+    color: rgba(200,170,110,0.6);
+    background: rgba(8,8,16,0.75);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(200, 170, 110, 0.12);
+    border: 1px solid rgba(200,170,110,0.12);
     border-radius: 8px;
-    padding: 4px 12px; cursor: pointer; font-size: 9px;
-    font-family: inherit; transition: all 0.25s ease;
+    padding: 4px 12px;
+    cursor: pointer;
+    font-size: 9px;
+    font-family: inherit;
+    transition: all 0.25s ease;
     letter-spacing: 0.5px;
   }
-  #options button:hover { background: rgba(200, 170, 110, 0.12); color: #f0e6d2; }
+  #options button:hover { background: rgba(200,170,110,0.12); color: #f0e6d2; }
   #options button.off { opacity: 0.4; }
 
   .overlay {
     position: absolute; inset: 0; z-index: 100;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
-    background: rgba(5, 5, 12, 0.92); backdrop-filter: blur(12px); color: #f0e6d2; text-align: center;
+    background: rgba(5,5,12,0.92); backdrop-filter: blur(12px); color: #f0e6d2; text-align: center;
   }
   .overlay h1 { font-size: 44px; letter-spacing: 8px; color: #e94560; margin-bottom: 4px; text-shadow: 0 0 60px rgba(233,69,96,0.2); }
   .overlay h2 { font-size: 16px; font-weight: 300; color: #c8aa6e; letter-spacing: 4px; margin-bottom: 24px; }
@@ -171,11 +146,11 @@
     transition: all 0.25s ease; box-shadow: 0 0 40px rgba(233,69,96,0.15);
   }
   .overlay button:hover { background: transparent; color: #e94560; transform: scale(1.05); }
-  .overlay .hint { margin-top: 24px; font-size: 11px; line-height: 2; color: rgba(240, 230, 210, 0.35); }
+  .overlay .hint { margin-top: 24px; font-size: 11px; line-height: 2; color: rgba(240,230,210,0.35); }
   .overlay .hint b { color: #c8aa6e; font-weight: 400; }
   .hidden { display: none !important; }
 
-  /* Barras de vida en los bordes */
+  /* Barras de vida en bordes */
   #hp-bars-container {
     position: absolute;
     top: 0;
@@ -191,13 +166,13 @@
     transform: translateY(-50%);
     display: flex;
     flex-direction: column;
-    gap: 3px;
-    padding: 6px 8px;
+    gap: 2px;
+    padding: 4px 6px;
     background: rgba(0,0,0,0.4);
     backdrop-filter: blur(6px);
     border: 1px solid rgba(200,170,110,0.04);
     border-radius: 6px;
-    min-width: 110px;
+    min-width: 100px;
     max-height: 70vh;
     overflow-y: auto;
     pointer-events: none;
@@ -215,96 +190,49 @@
     padding: 1px 3px;
     border-radius: 3px;
     background: rgba(255,255,255,0.02);
-    min-width: 100px;
+    min-width: 90px;
   }
-  .hp-bar-entry .name { 
-    font-size: 7px; 
-    font-weight: 500;
-    min-width: 30px;
-    max-width: 50px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .hp-bar-entry .hp-bar-mini {
-    flex: 1;
-    height: 3px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 2px;
-    overflow: hidden;
-    min-width: 20px;
-  }
-  .hp-bar-entry .hp-bar-mini .fill {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 0.3s ease;
-  }
-  .hp-bar-entry .hp-text {
-    font-size: 6px;
-    font-weight: 600;
-    min-width: 24px;
-    text-align: right;
-  }
-  .hp-bar-entry .role-text {
-    font-size: 5px;
-    padding: 0 3px;
-    border-radius: 2px;
-    background: rgba(255,255,255,0.03);
-    color: rgba(200,170,110,0.4);
-  }
+  .hp-bar-entry .name { font-size: 7px; font-weight: 500; min-width: 28px; max-width: 45px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .hp-bar-entry .hp-bar-mini { flex: 1; height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; min-width: 15px; }
+  .hp-bar-entry .hp-bar-mini .fill { height: 100%; border-radius: 2px; transition: width 0.3s ease; }
+  .hp-bar-entry .hp-text { font-size: 6px; font-weight: 600; min-width: 20px; text-align: right; }
+  .hp-bar-entry .role-text { font-size: 5px; padding: 0 2px; border-radius: 2px; background: rgba(255,255,255,0.03); color: rgba(200,170,110,0.4); }
   .hp-bar-entry.player-entry { background: rgba(46,204,113,0.06); border-left: 2px solid #2ecc71; }
   .hp-bar-entry.enemy-entry { background: rgba(231,76,60,0.04); border-right: 2px solid #e74c3c; }
-  
-  .hp-bar-side-title {
-    font-size: 6px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: rgba(200,170,110,0.15);
-    text-align: center;
-    padding-bottom: 3px;
-    border-bottom: 1px solid rgba(200,170,110,0.03);
-    margin-bottom: 3px;
-  }
+  .hp-bar-side-title { font-size: 6px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(200,170,110,0.15); text-align: center; padding-bottom: 3px; border-bottom: 1px solid rgba(200,170,110,0.03); margin-bottom: 3px; }
 </style>
 </head>
 <body>
 <div class="container">
   <canvas id="gameCanvas"></canvas>
 
-  <!-- Barras de vida en los bordes -->
-  <div id="hp-bars-container">
-    <div class="hp-bar-side left" id="allyBars">
-      <div class="hp-bar-side-title">ALIADOS</div>
-    </div>
-    <div class="hp-bar-side right" id="enemyBars">
-      <div class="hp-bar-side-title">ENEMIGOS</div>
-    </div>
+  <!-- Panel superior -->
+  <div id="top-panel" class="panel">
+    <span class="wave">⚔️ OLEADA <span id="wave-number">0</span></span>
+    <span class="nexus-blue">🔵 NEXO AZUL <span id="nexus-blue-hp">100%</span></span>
+    <span class="nexus-red">🔴 NEXO ROJO <span id="nexus-red-hp">100%</span></span>
   </div>
 
+  <!-- Panel de estadísticas -->
   <div id="player-stats" class="panel">
-    <div class="stat">
-      <span class="label">VIDA</span>
-      <span class="value hp-text" id="hp-text">120/120</span>
-      <span class="label">K/D</span>
-      <span class="value"><span class="kills" id="kills">0</span>/<span class="deaths" id="deaths">0</span></span>
-      <span class="label">ORO</span>
-      <span class="value money" id="money">500</span>
-      <span class="label">NIVEL</span>
-      <span class="value level" id="level-display">1</span>
+    <div class="stat-row">
+      <span class="stat-label">VIDA</span>
+      <span class="stat-value hp-text" id="hp-text">120/120</span>
     </div>
-    <div class="bar" id="hp-bar"><div class="fill" id="hp-fill"></div></div>
-    <div class="stat" style="padding-top:2px;">
-      <span class="label">EXP</span>
-      <span class="value" id="exp-text" style="font-size:8px;">0/80</span>
-      <div class="bar" id="exp-bar" style="flex:1; margin:0 8px;"><div class="fill" id="exp-fill"></div></div>
-      <span class="label" id="wave-number-display" style="font-size:8px; color:rgba(200,170,110,0.3);">OLEADA 0</span>
+    <div class="bar-container"><div class="bar-fill" id="hp-fill" style="width:100%"></div></div>
+    <div class="stat-row">
+      <span class="stat-label">K/D</span>
+      <span class="stat-value"><span class="kills" id="kills">0</span>/<span class="deaths" id="deaths">0</span></span>
+      <span class="stat-label">ORO</span>
+      <span class="stat-value money" id="money">500</span>
+      <span class="stat-label">NIVEL</span>
+      <span class="stat-value level" id="level-display">1</span>
     </div>
-  </div>
-
-  <div id="wave-info" class="panel">OLEADA <span class="wave-number" id="wave-number">0</span></div>
-  <div id="nexus-info" class="panel">
-    <span class="blue">NEXO AZUL <span id="nexus-blue-hp">100%</span></span>
-    <span class="red">NEXO ROJO <span id="nexus-red-hp">100%</span></span>
+    <div class="stat-row">
+      <span class="stat-label">EXP</span>
+      <span class="stat-value" id="exp-text" style="font-size:7px;">0/80</span>
+    </div>
+    <div class="bar-container"><div class="bar-fill exp-fill" id="exp-fill" style="width:0%"></div></div>
   </div>
 
   <div id="cooldown-bar" class="panel">DISPARO <span class="cd-fill" id="cooldown-text">LISTO</span></div>
@@ -341,6 +269,11 @@
     <h1 id="endTitle">VICTORIA</h1>
     <h2 id="endSubtitle">El nexo enemigo ha caído</h2>
     <button id="btnRestart" type="button">REINICIAR</button>
+  </div>
+
+  <div id="hp-bars-container">
+    <div class="hp-bar-side left" id="allyBars"><div class="hp-bar-side-title">ALIADOS</div></div>
+    <div class="hp-bar-side right" id="enemyBars"><div class="hp-bar-side-title">ENEMIGOS</div></div>
   </div>
 </div>
 
@@ -382,7 +315,7 @@
   };
 
   const ROLES = {
-    healer: { color: "#2ecc71", name: "SANADOR", hp: 0.9, dmg: 0.7, spd: 1.0, range: 1.4, isHealer: true },
+    healer: { color: "#2ecc71", name: "HELICÓPTERO", hp: 0.85, dmg: 0.75, spd: 1.3, range: 1.5, isHealer: true },
     strong: { color: "#e67e22", name: "FUERTE", hp: 1.0, dmg: 1.8, spd: 0.85, range: 1.3 },
     double: { color: "#f1c40f", name: "DOBLE", hp: 0.95, dmg: 0.65, spd: 1.0, range: 1.3 },
     tank:   { color: "#9b59b6", name: "TANQUE", hp: 1.8, dmg: 0.8, spd: 0.8, range: 1.1 },
@@ -410,7 +343,6 @@
   let wallSegments = [];
   let shopActive = false;
   let notificationTimer = 0;
-  let playerNearNexus = false;
 
   let gameStarted = false;
   let gameOver = false;
@@ -427,7 +359,206 @@
   };
 
   // ============================================================
-  // SISTEMA DE SONIDOS COMPLETO
+  // FUNCIÓN HELICÓPTERO
+  // ============================================================
+  function drawHelicopter(ctx, x, y, angle, team, rotorAngle, scale) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+    
+    const s = scale || 1.2;
+    
+    let mainColor, darkColor, lightColor;
+    if (team === 'blue') {
+      mainColor = '#3498db';
+      darkColor = '#1a5276';
+      lightColor = '#5dade2';
+    } else if (team === 'red') {
+      mainColor = '#e74c3c';
+      darkColor = '#6b1a1a';
+      lightColor = '#ec7063';
+    } else {
+      mainColor = '#2ecc71';
+      darkColor = '#1a8a4a';
+      lightColor = '#58d68d';
+    }
+    
+    // Rotor trasero
+    ctx.save();
+    ctx.translate(-34 * s, 0);
+    ctx.rotate(rotorAngle * 0.8);
+    ctx.fillStyle = 'rgba(241,196,15,0.25)';
+    ctx.strokeStyle = 'rgba(241,196,15,0.15)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 6 * s, 2 * s, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+    
+    // Cola
+    ctx.fillStyle = darkColor;
+    ctx.fillRect(-28 * s, -2.5 * s, 12 * s, 5 * s);
+    ctx.strokeStyle = mainColor;
+    ctx.lineWidth = 0.5;
+    ctx.strokeRect(-28 * s, -2.5 * s, 12 * s, 5 * s);
+    
+    // Cuerpo trasero
+    ctx.fillStyle = darkColor;
+    ctx.beginPath();
+    ctx.ellipse(-16 * s, 0, 8 * s, 6 * s, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = mainColor;
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+    
+    // Estabilizadores
+    ctx.save();
+    ctx.translate(-4 * s, -12 * s);
+    ctx.fillStyle = 'rgba(241,196,15,0.12)';
+    ctx.fillRect(-12 * s, -1.5 * s, 14 * s, 3 * s);
+    ctx.strokeStyle = 'rgba(241,196,15,0.06)';
+    ctx.lineWidth = 0.5;
+    ctx.strokeRect(-12 * s, -1.5 * s, 14 * s, 3 * s);
+    ctx.restore();
+    
+    ctx.save();
+    ctx.translate(-4 * s, 12 * s);
+    ctx.fillStyle = 'rgba(241,196,15,0.12)';
+    ctx.fillRect(-12 * s, -1.5 * s, 14 * s, 3 * s);
+    ctx.strokeStyle = 'rgba(241,196,15,0.06)';
+    ctx.lineWidth = 0.5;
+    ctx.strokeRect(-12 * s, -1.5 * s, 14 * s, 3 * s);
+    ctx.restore();
+    
+    // Cuerpo principal
+    const grad = ctx.createRadialGradient(0, -2 * s, 2 * s, 0, 0, 18 * s);
+    grad.addColorStop(0, lightColor);
+    grad.addColorStop(0.4, mainColor);
+    grad.addColorStop(1, darkColor);
+    ctx.fillStyle = grad;
+    ctx.shadowColor = mainColor;
+    ctx.shadowBlur = 8 * s;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 18 * s, 13 * s, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+    
+    // Rotor principal (en el CENTRO)
+    ctx.save();
+    ctx.translate(0, 0);
+    ctx.rotate(rotorAngle);
+    
+    ctx.fillStyle = '#f1c40f';
+    ctx.shadowColor = '#f1c40f';
+    ctx.shadowBlur = 12 * s;
+    ctx.beginPath();
+    ctx.arc(0, 0, 3 * s, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    
+    ctx.strokeStyle = 'rgba(241,196,15,0.2)';
+    ctx.lineWidth = 2 * s;
+    ctx.shadowColor = 'rgba(241,196,15,0.08)';
+    ctx.shadowBlur = 6 * s;
+    
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, -20 * s);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(20 * s, 0);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, 20 * s);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(-20 * s, 0);
+    ctx.stroke();
+    
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(241,196,15,0.04)';
+    ctx.beginPath();
+    ctx.arc(0, -18 * s, 3 * s, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(18 * s, 0, 3 * s, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(0, 18 * s, 3 * s, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(-18 * s, 0, 3 * s, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+    
+    // Cabina
+    ctx.fillStyle = 'rgba(100,180,255,0.1)';
+    ctx.strokeStyle = 'rgba(100,180,255,0.05)';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.ellipse(10 * s, 0, 8 * s, 6 * s, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    
+    // Lanzamisiles
+    ctx.save();
+    ctx.translate(12 * s, -6 * s);
+    ctx.fillStyle = darkColor;
+    ctx.fillRect(0, 0, 6 * s, 3 * s);
+    ctx.strokeStyle = 'rgba(231,76,60,0.2)';
+    ctx.lineWidth = 0.5;
+    ctx.strokeRect(0, 0, 6 * s, 3 * s);
+    ctx.fillStyle = '#e74c3c';
+    ctx.shadowColor = '#e74c3c';
+    ctx.shadowBlur = 4 * s;
+    ctx.beginPath();
+    ctx.arc(2 * s, 1.5 * s, 1.2 * s, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(4.5 * s, 1.5 * s, 1.2 * s, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.restore();
+    
+    ctx.save();
+    ctx.translate(12 * s, 6 * s);
+    ctx.fillStyle = darkColor;
+    ctx.fillRect(0, 0, 6 * s, 3 * s);
+    ctx.strokeStyle = 'rgba(231,76,60,0.2)';
+    ctx.lineWidth = 0.5;
+    ctx.strokeRect(0, 0, 6 * s, 3 * s);
+    ctx.fillStyle = '#e74c3c';
+    ctx.shadowColor = '#e74c3c';
+    ctx.shadowBlur = 4 * s;
+    ctx.beginPath();
+    ctx.arc(2 * s, 1.5 * s, 1.2 * s, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(4.5 * s, 1.5 * s, 1.2 * s, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.restore();
+    
+    // Faro
+    ctx.fillStyle = '#f1c40f';
+    ctx.globalAlpha = 0.2 + Math.sin(Date.now() / 300) * 0.1;
+    ctx.beginPath();
+    ctx.arc(16 * s, 0, 2 * s, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    
+    ctx.restore();
+  }
+
+  // ============================================================
+  // SISTEMA DE SONIDOS
   // ============================================================
   let audioCtx = null;
 
@@ -440,375 +571,142 @@
     if (AC) audioCtx = new AC();
   }
 
-  // 1. SONIDO DE DISPARO (CAÑÓN)
   function playShootSound() {
     if (!soundEnabled || !audioCtx) return;
     try {
       const now = audioCtx.currentTime;
-      
-      const bufferSize = audioCtx.sampleRate * 0.1;
-      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        const env = Math.exp((-i / bufferSize) * 8);
-        data[i] = (Math.random() * 2 - 1) * env;
-      }
-      const noise = audioCtx.createBufferSource();
-      const gain = audioCtx.createGain();
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = "bandpass";
-      filter.frequency.setValueAtTime(800, now);
-      filter.frequency.exponentialRampToValueAtTime(200, now + 0.06);
-      filter.Q.value = 0.8;
-      
-      noise.buffer = buffer;
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-      gain.gain.setValueAtTime(0.3, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-      noise.start(now);
-      noise.stop(now + 0.09);
-      
       const osc = audioCtx.createOscillator();
-      const g2 = audioCtx.createGain();
-      osc.type = "square";
-      osc.frequency.setValueAtTime(150, now);
-      osc.frequency.exponentialRampToValueAtTime(50, now + 0.03);
-      osc.connect(g2);
-      g2.connect(audioCtx.destination);
-      g2.gain.setValueAtTime(0.1, now);
-      g2.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
-      osc.start(now);
-      osc.stop(now + 0.04);
-      
-    } catch (e) {}
-  }
-
-  // 2. SONIDO DE DISPARO DE AMETRALLADORA (RÁPIDO)
-  function playMachineGunSound() {
-    if (!soundEnabled || !audioCtx) return;
-    try {
-      const now = audioCtx.currentTime;
-      
-      const bufferSize = audioCtx.sampleRate * 0.04;
-      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        const env = Math.exp((-i / bufferSize) * 10);
-        data[i] = (Math.random() * 2 - 1) * env;
-      }
-      const noise = audioCtx.createBufferSource();
       const gain = audioCtx.createGain();
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = "highpass";
-      filter.frequency.value = 500;
-      
-      noise.buffer = buffer;
-      noise.connect(filter);
-      filter.connect(gain);
+      osc.type = "square";
+      osc.frequency.setValueAtTime(200, now);
+      osc.frequency.exponentialRampToValueAtTime(80, now + 0.05);
+      osc.connect(gain);
       gain.connect(audioCtx.destination);
-      gain.gain.setValueAtTime(0.15, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
-      noise.start(now);
-      noise.stop(now + 0.04);
-      
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+      osc.start(now);
+      osc.stop(now + 0.06);
     } catch (e) {}
   }
 
-  // 3. SONIDO DE EXPLOSIÓN
   function playExplosionSound() {
     if (!soundEnabled || !audioCtx) return;
     try {
       const now = audioCtx.currentTime;
-      
-      const bufferSize = audioCtx.sampleRate * 0.4;
+      const bufferSize = audioCtx.sampleRate * 0.3;
       const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
       const data = buffer.getChannelData(0);
       for (let i = 0; i < bufferSize; i++) {
-        const env = Math.exp((-i / bufferSize) * 5);
-        data[i] = (Math.random() * 2 - 1) * env;
+        data[i] = (Math.random() * 2 - 1) * Math.exp((-i / bufferSize) * 5);
       }
       const noise = audioCtx.createBufferSource();
       const gain = audioCtx.createGain();
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = "lowpass";
-      filter.frequency.setValueAtTime(600, now);
-      filter.frequency.exponentialRampToValueAtTime(80, now + 0.3);
-      filter.Q.value = 0.5;
-      
       noise.buffer = buffer;
-      noise.connect(filter);
-      filter.connect(gain);
+      noise.connect(gain);
       gain.connect(audioCtx.destination);
-      gain.gain.setValueAtTime(0.4, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
       noise.start(now);
-      noise.stop(now + 0.36);
-      
-      const osc = audioCtx.createOscillator();
-      const g2 = audioCtx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(60, now);
-      osc.frequency.exponentialRampToValueAtTime(20, now + 0.25);
-      osc.connect(g2);
-      g2.connect(audioCtx.destination);
-      g2.gain.setValueAtTime(0.3, now);
-      g2.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-      osc.start(now);
-      osc.stop(now + 0.26);
-      
+      noise.stop(now + 0.26);
     } catch (e) {}
   }
 
-  // 4. SONIDO DE IMPACTO DE PROYECTIL
   function playImpactSound() {
     if (!soundEnabled || !audioCtx) return;
     try {
       const now = audioCtx.currentTime;
-      
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
       osc.type = "sine";
-      osc.frequency.setValueAtTime(200, now);
-      osc.frequency.exponentialRampToValueAtTime(100, now + 0.04);
+      osc.frequency.setValueAtTime(300, now);
+      osc.frequency.exponentialRampToValueAtTime(150, now + 0.03);
       osc.connect(gain);
       gain.connect(audioCtx.destination);
-      gain.gain.setValueAtTime(0.08, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+      gain.gain.setValueAtTime(0.05, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
       osc.start(now);
-      osc.stop(now + 0.05);
-      
-      const noise = audioCtx.createBufferSource();
-      const g2 = audioCtx.createGain();
-      const bufferSize = audioCtx.sampleRate * 0.03;
-      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = (Math.random() * 2 - 1) * Math.exp((-i / bufferSize) * 8);
-      }
-      noise.buffer = buffer;
-      noise.connect(g2);
-      g2.connect(audioCtx.destination);
-      g2.gain.setValueAtTime(0.06, now);
-      g2.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
-      noise.start(now);
-      noise.stop(now + 0.04);
-      
+      osc.stop(now + 0.04);
     } catch (e) {}
   }
 
-  // 5. SONIDO DE RUIDO DE ORUGAS (MOVIMIENTO)
   function playTrackSound() {
     if (!soundEnabled || !audioCtx) return;
     try {
       const now = audioCtx.currentTime;
-      
-      const bufferSize = audioCtx.sampleRate * 0.06;
-      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = (Math.random() * 2 - 1) * Math.exp((-i / bufferSize) * 5) * 0.5;
-      }
-      const noise = audioCtx.createBufferSource();
-      const gain = audioCtx.createGain();
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = "lowpass";
-      filter.frequency.value = 200;
-      
-      noise.buffer = buffer;
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-      gain.gain.setValueAtTime(0.04, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-      noise.start(now);
-      noise.stop(now + 0.06);
-      
-    } catch (e) {}
-  }
-
-  // 6. SONIDO DE CURACIÓN (SANADOR)
-  function playHealSound() {
-    if (!soundEnabled || !audioCtx) return;
-    try {
-      const now = audioCtx.currentTime;
-      
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(600, now);
-      osc.frequency.exponentialRampToValueAtTime(800, now + 0.06);
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(80, now);
+      osc.frequency.exponentialRampToValueAtTime(40, now + 0.04);
       osc.connect(gain);
       gain.connect(audioCtx.destination);
-      gain.gain.setValueAtTime(0.04, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+      gain.gain.setValueAtTime(0.02, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
       osc.start(now);
-      osc.stop(now + 0.07);
-      
-      const osc2 = audioCtx.createOscillator();
-      const g2 = audioCtx.createGain();
-      osc2.type = "sine";
-      osc2.frequency.setValueAtTime(400, now);
-      osc2.frequency.exponentialRampToValueAtTime(500, now + 0.04);
-      osc2.connect(g2);
-      g2.connect(audioCtx.destination);
-      g2.gain.setValueAtTime(0.03, now);
-      g2.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-      osc2.start(now);
-      osc2.stop(now + 0.05);
-      
+      osc.stop(now + 0.05);
     } catch (e) {}
   }
 
-  // 7. SONIDO DE SUBIR DE NIVEL
   function playLevelUpSound() {
     if (!soundEnabled || !audioCtx) return;
     try {
       const now = audioCtx.currentTime;
-      const notes = [523.25, 659.25, 783.99];
-      for (let i = 0; i < notes.length; i++) {
+      [523, 659, 784].forEach((freq, i) => {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = "sine";
-        osc.frequency.value = notes[i];
+        osc.frequency.value = freq;
         osc.connect(gain);
         gain.connect(audioCtx.destination);
-        gain.gain.setValueAtTime(0.05, now + i * 0.08);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.1);
+        gain.gain.setValueAtTime(0.04, now + i * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.08);
         osc.start(now + i * 0.08);
-        osc.stop(now + i * 0.08 + 0.11);
-      }
+        osc.stop(now + i * 0.08 + 0.09);
+      });
     } catch (e) {}
   }
 
   // ============================================================
-  // FUNCIONES DE SONIDO PARA CADA ELEMENTO
+  // CANVAS Y CAMARA
   // ============================================================
-  
-  // Disparo de torre (más metálico)
-  function playTowerShootSound() {
-    if (!soundEnabled || !audioCtx) return;
-    try {
-      const now = audioCtx.currentTime;
-      
-      const bufferSize = audioCtx.sampleRate * 0.08;
-      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        const env = Math.exp((-i / bufferSize) * 6);
-        data[i] = (Math.random() * 2 - 1) * env;
-      }
-      const noise = audioCtx.createBufferSource();
-      const gain = audioCtx.createGain();
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = "bandpass";
-      filter.frequency.setValueAtTime(600, now);
-      filter.frequency.exponentialRampToValueAtTime(150, now + 0.05);
-      filter.Q.value = 1;
-      
-      noise.buffer = buffer;
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-      gain.gain.setValueAtTime(0.25, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
-      noise.start(now);
-      noise.stop(now + 0.07);
-      
-      const osc = audioCtx.createOscillator();
-      const g2 = audioCtx.createGain();
-      osc.type = "square";
-      osc.frequency.setValueAtTime(120, now);
-      osc.frequency.exponentialRampToValueAtTime(40, now + 0.03);
-      osc.connect(g2);
-      g2.connect(audioCtx.destination);
-      g2.gain.setValueAtTime(0.08, now);
-      g2.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
-      osc.start(now);
-      osc.stop(now + 0.04);
-      
-    } catch (e) {}
-  }
+  const canvas = document.getElementById("gameCanvas");
+  const ctx = canvas.getContext("2d");
+  const minimapCanvas = document.getElementById("minimapCanvas");
+  const minimapCtx = minimapCanvas.getContext("2d");
+  const MM_W = minimapCanvas.width;
+  const MM_H = minimapCanvas.height;
 
-  // Disparo de minion (más ligero)
-  function playMinionShootSound() {
-    if (!soundEnabled || !audioCtx) return;
-    try {
-      const now = audioCtx.currentTime;
-      
-      const bufferSize = audioCtx.sampleRate * 0.05;
-      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        const env = Math.exp((-i / bufferSize) * 10);
-        data[i] = (Math.random() * 2 - 1) * env;
-      }
-      const noise = audioCtx.createBufferSource();
-      const gain = audioCtx.createGain();
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = "highpass";
-      filter.frequency.value = 300;
-      
-      noise.buffer = buffer;
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-      gain.gain.setValueAtTime(0.1, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-      noise.start(now);
-      noise.stop(now + 0.05);
-      
-    } catch (e) {}
+  function resizeCanvas() {
+    canvas.width = Math.max(320, window.innerWidth);
+    canvas.height = Math.max(240, window.innerHeight);
   }
+  resizeCanvas();
+  window.addEventListener("resize", resizeCanvas);
 
-  // Disparo de tanque enemigo
-  function playEnemyTankShootSound() {
-    if (!soundEnabled || !audioCtx) return;
-    try {
-      const now = audioCtx.currentTime;
-      
-      const bufferSize = audioCtx.sampleRate * 0.09;
-      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        const env = Math.exp((-i / bufferSize) * 7);
-        data[i] = (Math.random() * 2 - 1) * env;
-      }
-      const noise = audioCtx.createBufferSource();
-      const gain = audioCtx.createGain();
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = "bandpass";
-      filter.frequency.setValueAtTime(700, now);
-      filter.frequency.exponentialRampToValueAtTime(180, now + 0.05);
-      filter.Q.value = 0.9;
-      
-      noise.buffer = buffer;
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-      gain.gain.setValueAtTime(0.25, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
-      noise.start(now);
-      noise.stop(now + 0.08);
-      
-      const osc = audioCtx.createOscillator();
-      const g2 = audioCtx.createGain();
-      osc.type = "square";
-      osc.frequency.setValueAtTime(100, now);
-      osc.frequency.exponentialRampToValueAtTime(30, now + 0.03);
-      osc.connect(g2);
-      g2.connect(audioCtx.destination);
-      g2.gain.setValueAtTime(0.06, now);
-      g2.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
-      osc.start(now);
-      osc.stop(now + 0.04);
-      
-    } catch (e) {}
+  const camera = { x: 0, y: 0, targetX: 0, targetY: 0, smooth: 0.10 };
+
+  function clampCamera(v, size, map) {
+    if (size >= map) return (map - size) / 2;
+    return Math.max(0, Math.min(map - size, v));
+  }
+  function centerCameraOn(x, y) {
+    camera.targetX = clampCamera(x - canvas.width / 2, canvas.width, MAP_W);
+    camera.targetY = clampCamera(y - canvas.height / 2, canvas.height, MAP_H);
+  }
+  function updateCamera() {
+    camera.x += (camera.targetX - camera.x) * camera.smooth;
+    camera.y += (camera.targetY - camera.y) * camera.smooth;
+  }
+  function screenToWorld(sx, sy) { return { x: sx + camera.x, y: sy + camera.y }; }
+  function worldToScreen(wx, wy) { return { x: wx - camera.x, y: wy - camera.y }; }
+  function isVisible(wx, wy, margin) {
+    margin = margin || 60;
+    const sx = wx - camera.x, sy = wy - camera.y;
+    return sx > -margin && sx < canvas.width + margin && sy > -margin && sy < canvas.height + margin;
   }
 
   // ============================================================
-  // FONDO DE LÍNEAS TENUES
+  // FONDO
   // ============================================================
   function drawBackground() {
     ctx.fillStyle = "#12121f";
@@ -852,45 +750,6 @@
     ctx.setLineDash([]);
     ctx.globalAlpha = 1;
     ctx.restore();
-  }
-
-  // ============================================================
-  // CANVAS Y CAMARA
-  // ============================================================
-  const canvas = document.getElementById("gameCanvas");
-  const ctx = canvas.getContext("2d");
-  const minimapCanvas = document.getElementById("minimapCanvas");
-  const minimapCtx = minimapCanvas.getContext("2d");
-  const MM_W = minimapCanvas.width;
-  const MM_H = minimapCanvas.height;
-
-  function resizeCanvas() {
-    canvas.width = Math.max(320, window.innerWidth);
-    canvas.height = Math.max(240, window.innerHeight);
-  }
-  resizeCanvas();
-  window.addEventListener("resize", resizeCanvas);
-
-  const camera = { x: 0, y: 0, targetX: 0, targetY: 0, smooth: 0.10 };
-
-  function clampCamera(v, size, map) {
-    if (size >= map) return (map - size) / 2;
-    return Math.max(0, Math.min(map - size, v));
-  }
-  function centerCameraOn(x, y) {
-    camera.targetX = clampCamera(x - canvas.width / 2, canvas.width, MAP_W);
-    camera.targetY = clampCamera(y - canvas.height / 2, canvas.height, MAP_H);
-  }
-  function updateCamera() {
-    camera.x += (camera.targetX - camera.x) * camera.smooth;
-    camera.y += (camera.targetY - camera.y) * camera.smooth;
-  }
-  function screenToWorld(sx, sy) { return { x: sx + camera.x, y: sy + camera.y }; }
-  function worldToScreen(wx, wy) { return { x: wx - camera.x, y: wy - camera.y }; }
-  function isVisible(wx, wy, margin) {
-    margin = margin || 60;
-    const sx = wx - camera.x, sy = wy - camera.y;
-    return sx > -margin && sx < canvas.width + margin && sy > -margin && sy < canvas.height + margin;
   }
 
   // ============================================================
@@ -1004,9 +863,9 @@
         spawnParticles(tank.x, tank.y, "#1abc9c", 10, 40);
         break;
       case 'heal':
-        if (tank.role === "healer") {
-          tank.healAmount = (tank.healAmount || 30) + 20;
-          spawnParticles(tank.x, tank.y, "#2ecc71", 15, 50);
+        if (tank.isHelicopter) {
+          tank.missileDamage = (tank.missileDamage || 30) + 15;
+          spawnParticles(tank.x, tank.y, "#e74c3c", 15, 50);
         } else {
           tank.money += cost;
           return false;
@@ -1061,7 +920,6 @@
     }
 
     const near = isNearNexus(playerTank);
-    playerNearNexus = near;
 
     if (near && !gameOver) {
       shopEl.classList.add("active");
@@ -1101,16 +959,15 @@
       lvlEl.textContent = isMaxed ? "MAX" : "Lv." + count;
       
       const isHealType = type === 'heal';
-      const isHealer = tank.role === 'healer';
-      btn.disabled = isMaxed || (tank.money < cost) || (isHealType && !isHealer);
+      const isHelicopter = tank.isHelicopter;
+      btn.disabled = isMaxed || (tank.money < cost) || (isHealType && !isHelicopter);
       
       if (isHealType) {
-        btn.style.display = isHealer ? "inline-block" : "none";
+        btn.style.display = isHelicopter ? "inline-block" : "none";
       }
     }
   }
 
-  // Eventos de la tienda
   document.getElementById("buyHp").addEventListener("click", () => {
     if (playerTank) buyUpgradeForTank(playerTank, "hp");
     updateShopButtons();
@@ -1328,21 +1185,16 @@
   }
 
   // ============================================================
-  // FUNCIÓN PARA VERIFICAR SI HAY ALIADOS CERCA DEL NEXO
+  // FUNCIÓN PARA VERIFICAR ENEMIGOS CERCA
   // ============================================================
-  function hasAlliesNearNexus(nexus) {
-    const range = 300;
+  function countEnemiesNear(entity, range) {
+    let count = 0;
     for (const e of entities) {
-      if (e.team === nexus.team && e.isAlive()) {
-        if (e instanceof Tank || e instanceof Minion) {
-          const dist = Math.hypot(e.x - nexus.x, e.y - nexus.y);
-          if (dist < range) {
-            return true;
-          }
-        }
-      }
+      if (!e.isAlive() || e.team === entity.team) continue;
+      const dist = Math.hypot(e.x - entity.x, e.y - entity.y);
+      if (dist < range) count++;
     }
-    return false;
+    return count;
   }
 
   // ============================================================
@@ -1430,12 +1282,11 @@
   }
 
   // ============================================================
-  // HUELLAS Y SONIDO DE MOVIMIENTO
+  // HUELLAS CON ANCHO PROPORCIONAL
   // ============================================================
-  function addTrack(x, y, angle, color) {
+  function addTrack(x, y, angle, color, width) {
     if (tracks.length > 300) tracks.shift();
-    tracks.push({ x, y, angle, life: 2.5, color });
-    // Sonido de orugas al moverse (10% de probabilidad)
+    tracks.push({ x, y, angle, life: 2.5, color, width: width || 6 });
     if (Math.random() < 0.08) {
       playTrackSound();
     }
@@ -1455,9 +1306,10 @@
       ctx.globalAlpha = Math.max(0, t.life / 2.5) * 0.15;
       ctx.translate(t.x - camera.x, t.y - camera.y);
       ctx.rotate(t.angle);
+      const w = t.width || 6;
       ctx.fillStyle = t.color;
-      ctx.fillRect(-5, -8, 10, 3);
-      ctx.fillRect(-5, 5, 10, 3);
+      ctx.fillRect(-w/2, -w/2 - 2, w, 3);
+      ctx.fillRect(-w/2, w/2 - 1, w, 3);
       ctx.restore();
     }
     ctx.globalAlpha = 1;
@@ -1504,13 +1356,20 @@
   }
 
   // ============================================================
-  // PROYECTILES CON SONIDO DE IMPACTO
+  // PROYECTILES
   // ============================================================
   function fireProjectile(opts) {
     if (projectiles.length >= MAX_PROJECTILES) return;
-    const speed = opts.speed || 420;
+    
+    let radius = opts.radius || 5;
+    let speed = opts.speed || 420;
+    
+    if (opts.isHelicopterBullet) {
+      radius = radius * 0.5;
+      speed = speed * 1.2;
+    }
+    
     const range = opts.range || 280;
-    const radius = opts.radius || 5;
     const color = opts.color || "#f1c40f";
     const trail = [];
     projectiles.push({
@@ -1527,21 +1386,24 @@
       trail: trail,
       trailTimer: 0,
       isMachineGun: opts.isMachineGun || false,
+      isMissile: opts.isMissile || false,
       isNexusMachineGun: opts.isNexusMachineGun || false,
-      soundPlayed: false
+      soundPlayed: false,
+      isHelicopterBullet: opts.isHelicopterBullet || false
     });
     
-    // Sonido de disparo según el tipo
     if (opts.isPlayer) {
       playShootSound();
     } else if (opts.isTower) {
-      playTowerShootSound();
+      playShootSound();
     } else if (opts.isMinion) {
-      playMinionShootSound();
+      playShootSound();
     } else if (opts.isTank) {
-      playEnemyTankShootSound();
+      playShootSound();
     } else if (opts.isMachineGun) {
-      playMachineGunSound();
+      playShootSound();
+    } else if (opts.isMissile) {
+      playExplosionSound();
     }
   }
 
@@ -1620,15 +1482,36 @@
       }
       
       ctx.save();
-      ctx.fillStyle = p.color;
-      ctx.beginPath();
-      ctx.arc(sx, sy, p.radius + 1, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "#fff";
-      ctx.globalAlpha = 0.4;
-      ctx.beginPath();
-      ctx.arc(sx - p.radius * 0.3, sy - p.radius * 0.3, p.radius * 0.3, 0, Math.PI * 2);
-      ctx.fill();
+      
+      if (p.isMissile) {
+        const grad = ctx.createRadialGradient(sx - 2, sy - 2, 1, sx, sy, p.radius + 4);
+        grad.addColorStop(0, "#fff");
+        grad.addColorStop(0.3, p.color);
+        grad.addColorStop(1, p.color + "88");
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(sx, sy, p.radius + 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#fff";
+        ctx.globalAlpha = 0.6;
+        ctx.beginPath();
+        ctx.arc(sx - p.radius * 0.3, sy - p.radius * 0.3, p.radius * 0.4, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        ctx.fillStyle = p.color;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = p.isHelicopterBullet ? 3 : 6;
+        ctx.beginPath();
+        ctx.arc(sx, sy, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = "#fff";
+        ctx.globalAlpha = p.isHelicopterBullet ? 0.2 : 0.3;
+        ctx.beginPath();
+        ctx.arc(sx - p.radius * 0.2, sy - p.radius * 0.2, p.radius * 0.3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      
       ctx.restore();
     }
     ctx.globalAlpha = 1;
@@ -1651,6 +1534,7 @@
       this.expValue = 10;
       this.kills = 0;
       this.deaths = 0;
+      this.baseAttackRange = 0;
     }
     isAlive() { return this.alive && this.hp > 0; }
     enemyTeam() { return this.team === "blue" ? "red" : "blue"; }
@@ -1709,7 +1593,8 @@
         isMinion: this instanceof Minion,
         isTank: this instanceof Tank && !this.isPlayer,
         isMachineGun: opts && opts.isMachineGun || false,
-        isNexusMachineGun: opts && opts.isNexusMachineGun || false
+        isMissile: opts && opts.isMissile || false,
+        isHelicopterBullet: opts && opts.isHelicopterBullet || false
       });
       this.shootCooldown = this.attackCooldown;
     }
@@ -1718,7 +1603,7 @@
   }
 
   // ============================================================
-  // NEXO CON CAÑÓN - RANGO 350
+  // NEXO
   // ============================================================
   class Nexus extends Entity {
     constructor(x, y, team) {
@@ -1726,6 +1611,7 @@
       this.maxHp = 3000;
       this.hp = this.maxHp;
       this.collisionRadius = 84;
+      this.baseAttackRange = 350;
       this.attackRange = 350;
       this.attackDamage = 22;
       this.attackCooldown = 1.4;
@@ -1769,6 +1655,11 @@
     }
     update(dt) {
       if (!this.isAlive()) return;
+      
+      const enemyCount = countEnemiesNear(this, 400);
+      this.attackRange = this.baseAttackRange + enemyCount * 15;
+      this.attackRange = Math.min(this.attackRange, this.baseAttackRange * 2.5);
+      
       this.angle += dt * 0.3;
       this.pulse += dt * 0.5;
       
@@ -1854,6 +1745,20 @@
       const sx = this.x - camera.x, sy = this.y - camera.y;
       const color = TEAM_COLOR[this.team];
       const glow = this.isAlive() ? 1 + Math.sin(this.pulse) * 0.05 : 0.3;
+      
+      if (this.isAlive()) {
+        ctx.save();
+        ctx.globalAlpha = 0.04;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 0.5;
+        ctx.setLineDash([4, 8]);
+        ctx.beginPath();
+        ctx.arc(sx, sy, this.attackRange, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.globalAlpha = 1;
+        ctx.restore();
+      }
       
       ctx.save();
       ctx.translate(sx, sy);
@@ -1961,6 +1866,12 @@
           ctx.globalAlpha = 1;
         }
         
+        ctx.fillStyle = "rgba(200,170,110,0.15)";
+        ctx.font = "6px monospace";
+        ctx.textBaseline = "bottom";
+        ctx.textAlign = "right";
+        ctx.fillText("RNG: " + Math.round(this.attackRange), 45, -30);
+        
       } else {
         ctx.globalAlpha = 0.4;
         ctx.fillStyle = "#555";
@@ -1974,7 +1885,7 @@
   }
 
   // ============================================================
-  // TORRE - RANGO 300-320
+  // TORRE
   // ============================================================
   class Tower extends Entity {
     constructor(x, y, team, lane, tier) {
@@ -1984,7 +1895,8 @@
       this.maxHp = 1000;
       this.hp = this.maxHp;
       this.collisionRadius = 44;
-      this.attackRange = 300 + (tier - 1) * 10;
+      this.baseAttackRange = 300 + (tier - 1) * 10;
+      this.attackRange = this.baseAttackRange;
       this.attackDamage = 18 + tier * 2;
       this.attackCooldown = Math.max(0.6, 1.1 - tier * 0.05);
       this.expValue = 60 + tier * 10;
@@ -2011,6 +1923,10 @@
     }
     update(dt) {
       if (!this.isAlive()) return;
+      
+      const enemyCount = countEnemiesNear(this, 350);
+      this.attackRange = this.baseAttackRange + enemyCount * 12;
+      this.attackRange = Math.min(this.attackRange, this.baseAttackRange * 2.2);
       
       this.shieldCheckTimer -= dt;
       if (this.shieldCheckTimer <= 0) {
@@ -2085,6 +2001,20 @@
       const color1 = this.team === "blue" ? "#2a6b3a" : "#6b2a2a";
       const color2 = this.team === "blue" ? "#4a8a5a" : "#8a4a4a";
       const color3 = this.team === "blue" ? "#1a4a2a" : "#4a1a1a";
+      
+      if (this.isAlive()) {
+        ctx.save();
+        ctx.globalAlpha = 0.03;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 0.5;
+        ctx.setLineDash([3, 6]);
+        ctx.beginPath();
+        ctx.arc(sx, sy, this.attackRange, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.globalAlpha = 1;
+        ctx.restore();
+      }
       
       ctx.save();
       ctx.translate(sx, sy);
@@ -2190,6 +2120,12 @@
         ctx.textBaseline = "bottom";
         ctx.fillText("Nv" + this.level + (this.hasShield ? " ESCUDO" : ""), 0, -this.bodyLength/2 - 10);
         
+        ctx.fillStyle = "rgba(200,170,110,0.1)";
+        ctx.font = "5px monospace";
+        ctx.textBaseline = "bottom";
+        ctx.textAlign = "right";
+        ctx.fillText("RNG:" + Math.round(this.attackRange), this.bodyWidth/2 + 4, -this.bodyLength/2 - 2);
+        
       } else {
         ctx.globalAlpha = 0.3;
         ctx.fillStyle = "#666";
@@ -2203,7 +2139,7 @@
   }
 
   // ============================================================
-  // MINION - RANGOS AUMENTADOS (250 y 120)
+  // MINION
   // ============================================================
   class Minion extends Entity {
     constructor(x, y, team, lane, ranged) {
@@ -2407,22 +2343,31 @@
       this.path = lanePathFor(team, this.lane);
       this.pathIndex = 1;
       this.spawnPoint = { x, y };
-      this.healAmount = 30;
+      
+      this.isHelicopter = role === "healer";
+      this.missileDamage = 30;
+      this.machineGunDamage = 8;
+      this.machineGunCooldown = 0.12;
       this.machineGunTimer = 0;
-      this.machineGunCooldown = 0.15;
+      this.missileCooldown = 1.5;
+      this.missileTimer = 0;
+      this.rotorAngle = 0;
+      this.hoverOffset = 0;
+      this.hoverSpeed = 2.5;
       
       this.money = isPlayer ? 500 : 300 + Math.floor(Math.random() * 200);
       this.upgradeCounts = { hp: 0, dmg: 0, speed: 0, heal: 0, range: 0 };
       this.shopCooldown = 0;
       
       const cfg = ROLES[this.role] || { hp: 1, dmg: 1, spd: 1, range: 1 };
-      this.roleScale = this.role === "tank" ? 1.4 : (this.role === "fast" ? 0.8 : 1.0);
+      this.roleScale = this.isHelicopter ? 1.0 : (this.role === "tank" ? 1.4 : (this.role === "fast" ? 0.8 : 1.0));
       this.bodyWidth = 32 * this.roleScale;
       this.bodyLength = 40 * this.roleScale;
+      this.trackWidth = this.role === "fast" ? 4 : (this.role === "tank" ? 10 : 6);
       
       this.color = this.isPlayer ? "#f0e6d2" : (cfg ? cfg.color : (this.team === "blue" ? "#3498db" : "#e74c3c"));
       this.roleColor = cfg ? cfg.color : null;
-      this.roleName = cfg ? cfg.name : "";
+      this.roleName = this.isHelicopter ? "HELICÓPTERO" : (cfg ? cfg.name : "");
       this.glyph = this.isPlayer ? "★" : "◆";
       this.isFast = this.role === "fast";
       this.isTank = this.role === "tank";
@@ -2437,10 +2382,18 @@
       const lvl = this.level;
       const cfg = ROLES[this.role] || { hp: 1, dmg: 1, spd: 1, range: 1 };
       const ratio = keepRatio && this.maxHp ? this.hp / this.maxHp : 1;
-      this.maxHp = Math.round((130 + (lvl - 1) * 34) * cfg.hp);
+      this.maxHp = Math.round((120 + (lvl - 1) * 30) * cfg.hp);
       this.hp = Math.max(1, Math.round(this.maxHp * ratio));
-      this.attackDamage = Math.round((13 + (lvl - 1) * 4) * cfg.dmg);
-      this.speed = (86 + (lvl - 1) * 3) * cfg.spd;
+      
+      if (this.isHelicopter) {
+        this.attackDamage = Math.round((6 + (lvl - 1) * 2) * cfg.dmg);
+        this.machineGunDamage = this.attackDamage;
+        this.missileDamage = Math.round((30 + (lvl - 1) * 8) * cfg.dmg);
+      } else {
+        this.attackDamage = Math.round((13 + (lvl - 1) * 4) * cfg.dmg);
+      }
+      
+      this.speed = (this.isHelicopter ? 100 : 86 + (lvl - 1) * 3) * cfg.spd;
       
       if (this.isPlayer) {
         this.attackRange = 250;
@@ -2448,10 +2401,11 @@
         this.attackRange = 250 * cfg.range;
       }
       
-      this.attackCooldown = Math.max(0.22, (0.8 - (lvl - 1) * 0.035) / (this.role === "double" ? 1.6 : 1));
-      if (this.isHealer) {
-        this.attackCooldown = Math.max(0.08, 0.15 - (lvl - 1) * 0.005);
-        this.attackDamage = Math.round((5 + (lvl - 1) * 1.5) * cfg.dmg);
+      if (this.isHelicopter) {
+        this.attackCooldown = Math.max(0.08, 0.12 - (lvl - 1) * 0.004);
+        this.missileCooldown = Math.max(0.8, 1.5 - (lvl - 1) * 0.05);
+      } else {
+        this.attackCooldown = Math.max(0.22, (0.8 - (lvl - 1) * 0.035) / (this.role === "double" ? 1.6 : 1));
       }
     }
     die(source) {
@@ -2485,24 +2439,76 @@
       this.moveTarget = { x: wx, y: wy };
       this.angle = Math.atan2(wy - this.y, wx - this.x);
     }
+    
+    shootHelicopter(target) {
+      if (!this.isHelicopter) return;
+      
+      const isMinion = target instanceof Minion;
+      const isStructure = target instanceof Tower || target instanceof Nexus;
+      const isTank = target instanceof Tank;
+      
+      if (isMinion || (isTank && !target.isTank)) {
+        if (this.machineGunTimer <= 0) {
+          this.machineGunTimer = this.machineGunCooldown;
+          const angle = this.cannonAngle + (Math.random() - 0.5) * 0.08;
+          const spawnX = this.x + Math.cos(angle) * 22 * this.roleScale;
+          const spawnY = this.y + Math.sin(angle) * 22 * this.roleScale;
+          
+          fireProjectile({
+            x: spawnX, y: spawnY,
+            angle: angle,
+            damage: this.machineGunDamage,
+            team: this.team,
+            owner: this,
+            radius: 3,
+            speed: 550,
+            range: this.attackRange + 80,
+            color: "#ffd479",
+            isPlayer: this.isPlayer,
+            isMachineGun: true,
+            isHelicopterBullet: true,
+            isTank: !this.isPlayer
+          });
+          spawnParticles(spawnX, spawnY, "#ffd479", 2, 15);
+          this.shootCooldown = this.attackCooldown;
+        }
+      } 
+      else if (isStructure || (isTank && target.isTank)) {
+        if (this.missileTimer <= 0) {
+          this.missileTimer = this.missileCooldown;
+          const angle = this.cannonAngle;
+          const spawnX = this.x + Math.cos(angle) * 25 * this.roleScale;
+          const spawnY = this.y + Math.sin(angle) * 25 * this.roleScale;
+          
+          fireProjectile({
+            x: spawnX, y: spawnY,
+            angle: angle,
+            damage: this.missileDamage,
+            team: this.team,
+            owner: this,
+            radius: 8,
+            speed: 320,
+            range: this.attackRange + 120,
+            color: "#e74c3c",
+            isPlayer: this.isPlayer,
+            isMissile: true,
+            isTank: !this.isPlayer
+          });
+          spawnParticles(spawnX, spawnY, "#e74c3c", 6, 40);
+          playExplosionSound();
+          this.shootCooldown = this.attackCooldown;
+        }
+      }
+    }
+    
     shoot() {
       if (this.shootCooldown > 0 || !this.isAlive()) return;
       
-      if (this.isHealer) {
-        const opts = { radius: 3, speed: 520, color: this.isPlayer ? "#2ecc71" : this.color, isMachineGun: true };
-        const angle = this.cannonAngle + (Math.random() - 0.5) * 0.12;
-        const spawnX = this.x + Math.cos(angle) * 22 * this.roleScale;
-        const spawnY = this.y + Math.sin(angle) * 22 * this.roleScale;
-        
-        fireProjectile({
-          x: spawnX, y: spawnY, angle: angle,
-          damage: this.attackDamage, team: this.team, owner: this,
-          radius: opts.radius, speed: opts.speed, range: this.attackRange + 40,
-          color: opts.color, isPlayer: this.isPlayer, isMachineGun: true,
-          isTank: !this.isPlayer
-        });
-        this.shootCooldown = this.attackCooldown;
-        spawnParticles(spawnX, spawnY, "#2ecc71", 2, 20);
+      if (this.isHelicopter) {
+        let target = this.findTarget(this.attackRange + 100);
+        if (target) {
+          this.shootHelicopter(target);
+        }
         return;
       }
       
@@ -2527,23 +2533,13 @@
       this.shootCooldown = this.attackCooldown;
       spawnParticles(spawnX, spawnY, "#ffd479", 3, 25);
     }
+    
     applyHealerAura(dt) {
-      if (!this.isHealer) return;
-      this.healTimer -= dt;
-      if (this.healTimer > 0) return;
-      this.healTimer = 0.8;
-      for (const e of entities) {
-        if (e === this || e.team !== this.team || !e.isAlive()) continue;
-        if (!(e instanceof Tank) && !(e instanceof Minion)) continue;
-        if (Math.hypot(e.x - this.x, e.y - this.y) < 160 && e.hp < e.maxHp) {
-          const healAmount = (this.healAmount || 30) * 0.04;
-          e.hp = Math.min(e.maxHp, e.hp + healAmount);
-          spawnParticles(e.x, e.y, "#2ecc71", 2, 12);
-          playHealSound();
-          if (e.isPlayer) updatePlayerStats();
-        }
-      }
+      if (!this.isHelicopter) return;
+      this.hoverOffset += dt * this.hoverSpeed;
+      this.rotorAngle += dt * 18;
     }
+    
     moveStep(tx, ty, dt) {
       const angle = Math.atan2(ty - this.y, tx - this.x);
       let diff = angle - this.angle;
@@ -2573,8 +2569,16 @@
           }
         }
       }
-      this.x += (Math.cos(angle) * this.speed + px * 2.5) * dt;
-      this.y += (Math.sin(angle) * this.speed + py * 2.5) * dt;
+      
+      if (this.isHelicopter) {
+        const hoverY = Math.sin(this.hoverOffset) * 3;
+        this.x += (Math.cos(angle) * this.speed + px * 2.5) * dt;
+        this.y += (Math.sin(angle) * this.speed + py * 2.5 + hoverY * 0.5) * dt;
+      } else {
+        this.x += (Math.cos(angle) * this.speed + px * 2.5) * dt;
+        this.y += (Math.sin(angle) * this.speed + py * 2.5) * dt;
+      }
+      
       this.x = Math.max(16 * this.roleScale, Math.min(MAP_W - 16 * this.roleScale, this.x));
       this.y = Math.max(16 * this.roleScale, Math.min(MAP_H - 16 * this.roleScale, this.y));
       
@@ -2582,7 +2586,7 @@
       if (this.trackTimer <= 0) {
         this.trackTimer = 0.12;
         const trackColor = this.team === "blue" ? "#2a5a3a" : "#5a2a2a";
-        addTrack(this.x, this.y, this.angle, trackColor);
+        addTrack(this.x, this.y, this.angle, trackColor, this.trackWidth);
       }
     }
     update(dt) {
@@ -2605,6 +2609,11 @@
       diff = Math.atan2(Math.sin(diff), Math.cos(diff));
       this.cannonAngle += diff * 8 * dt;
       
+      if (this.isHelicopter) {
+        this.machineGunTimer -= dt;
+        this.missileTimer -= dt;
+      }
+      
       this.shootCooldown -= dt;
       this.applyHealerAura(dt);
 
@@ -2613,14 +2622,14 @@
         return;
       }
 
-      const target = this.findTarget(this.attackRange);
+      const target = this.findTarget(this.attackRange + 50);
       if (target) {
         this.aimAt(target.x, target.y);
         const dist = Math.hypot(target.x - this.x, target.y - this.y);
         
         if (dist > this.attackRange * 0.85) {
           this.moveStep(target.x, target.y, dt);
-        } else if (dist < this.attackRange * 0.5 && !this.isTank) {
+        } else if (dist < this.attackRange * 0.5 && !this.isTank && !this.isHelicopter) {
           this.moveStep(this.x - Math.cos(this.cannonAngle) * 80, 
                        this.y - Math.sin(this.cannonAngle) * 80, dt);
         }
@@ -2656,8 +2665,70 @@
       if (!isVisible(this.x, this.y, 70 * this.roleScale)) return;
       const sx = this.x - camera.x, sy = this.y - camera.y;
 
+      if (this.isHelicopter) {
+        const rotorAngle = this.rotorAngle || 0;
+        drawHelicopter(ctx, sx, sy, this.angle, this.team, rotorAngle, 1.3);
+        
+        const pct = this.hp / this.maxHp;
+        const barWidth = 50;
+        const barY = -42;
+        ctx.save();
+        ctx.fillStyle = "rgba(0,0,0,0.7)";
+        ctx.fillRect(sx - barWidth/2 - 1, sy + barY - 1, barWidth + 2, 5);
+        ctx.fillStyle = pct > 0.5 ? "#2ecc71" : pct > 0.25 ? "#f1c40f" : "#e74c3c";
+        ctx.fillRect(sx - barWidth/2, sy + barY, barWidth * pct, 4);
+        ctx.restore();
+        
+        ctx.save();
+        ctx.fillStyle = "#c8aa6e";
+        ctx.font = "bold 9px monospace";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "bottom";
+        ctx.fillText("Nv" + this.level, sx, sy - 36);
+        ctx.restore();
+        
+        if (this.isPlayer) {
+          ctx.save();
+          ctx.fillStyle = "#2ecc71";
+          ctx.font = "bold 8px monospace";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "top";
+          ctx.fillText("JUGADOR", sx, sy + 30);
+          ctx.fillStyle = this.team === "blue" ? "#3498db" : "#e74c3c";
+          ctx.font = "bold 7px monospace";
+          ctx.fillText(this.team.toUpperCase(), sx, sy + 38);
+          ctx.fillStyle = "#f1c40f";
+          ctx.font = "bold 7px monospace";
+          ctx.fillText("" + Math.floor(this.money || 0), sx, sy + 46);
+          ctx.restore();
+        } else {
+          ctx.save();
+          ctx.fillStyle = "rgba(200,170,110,0.15)";
+          ctx.font = "bold 7px monospace";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "top";
+          ctx.fillText("" + Math.floor(this.money || 0), sx, sy + 30);
+          ctx.restore();
+        }
+        
+        return;
+      }
+
+      // Tanque normal con barra de vida
       ctx.save();
       ctx.translate(sx, sy);
+      
+      // Barra de vida ENCIMA
+      const hpPct = this.hp / this.maxHp;
+      const barW = this.bodyLength * 1.2;
+      const barH = 4;
+      const barY2 = -this.bodyWidth/2 - 10 * this.roleScale;
+      ctx.save();
+      ctx.fillStyle = "rgba(0,0,0,0.6)";
+      ctx.fillRect(-barW/2 - 1, barY2 - 1, barW + 2, barH + 2);
+      ctx.fillStyle = hpPct > 0.5 ? "#2ecc71" : hpPct > 0.25 ? "#f1c40f" : "#e74c3c";
+      ctx.fillRect(-barW/2, barY2, barW * hpPct, barH);
+      ctx.restore();
       
       if (this.roleName && !this.isPlayer) {
         ctx.save();
@@ -2666,7 +2737,7 @@
         ctx.font = "bold " + (8 * this.roleScale) + "px monospace";
         ctx.textAlign = "center";
         ctx.textBaseline = "bottom";
-        ctx.fillText(this.roleName, 0, -this.bodyWidth/2 - 18 * this.roleScale);
+        ctx.fillText(this.roleName, 0, barY2 - 6);
         ctx.restore();
       }
       
@@ -2773,17 +2844,6 @@
       ctx.strokeRect(-this.bodyLength/2 + 5 * this.roleScale, -this.bodyWidth/2 + 5 * this.roleScale, 
                     this.bodyLength - 10 * this.roleScale, this.bodyWidth - 10 * this.roleScale);
       
-      if (this.isHealer) {
-        ctx.fillStyle = "rgba(46, 204, 113, 0.2)";
-        const crossSize = 8 * this.roleScale;
-        ctx.fillRect(-crossSize/3, -crossSize, crossSize/1.5, crossSize * 2);
-        ctx.fillRect(-crossSize, -crossSize/3, crossSize * 2, crossSize/1.5);
-        ctx.fillStyle = "rgba(46, 204, 113, 0.1)";
-        ctx.beginPath();
-        ctx.arc(0, 0, crossSize * 0.8, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      
       if (this.isStrong) {
         ctx.fillStyle = "rgba(255,255,255,0.02)";
         ctx.fillRect(-this.bodyLength/2, -this.bodyWidth/2 + 4 * this.roleScale, 
@@ -2810,26 +2870,7 @@
       ctx.fill();
       ctx.shadowBlur = 0;
       
-      if (this.isHealer) {
-        const cannonLen = this.bodyLength * 0.25 * this.roleScale;
-        const cannonW = 3 * this.roleScale;
-        for (let side = -1; side <= 1; side++) {
-          const offset = 3 * this.roleScale * side;
-          const cannonGrad = ctx.createLinearGradient(0, -cannonW/2, 0, cannonW/2);
-          cannonGrad.addColorStop(0, color3);
-          cannonGrad.addColorStop(0.3, this.color);
-          cannonGrad.addColorStop(0.7, this.color);
-          cannonGrad.addColorStop(1, color3);
-          ctx.fillStyle = cannonGrad;
-          ctx.fillRect(4 * this.roleScale, -cannonW/2 + offset, cannonLen, cannonW);
-          ctx.strokeStyle = "rgba(255,255,255,0.04)";
-          ctx.lineWidth = 0.5;
-          ctx.strokeRect(4 * this.roleScale, -cannonW/2 + offset, cannonLen, cannonW);
-          ctx.fillStyle = "#2a2a2a";
-          ctx.fillRect(4 * this.roleScale + cannonLen - 2 * this.roleScale, -cannonW/2 - 0.5 + offset, 
-                      2 * this.roleScale, cannonW + 1);
-        }
-      } else if (this.isDouble) {
+      if (this.isDouble) {
         const cannonLen = this.bodyLength * 0.3 * this.roleScale;
         const cannonW = 4 * this.roleScale;
         for (let side = -1; side <= 1; side += 2) {
@@ -2869,10 +2910,10 @@
       ctx.restore();
       
       ctx.fillStyle = "#c8aa6e";
-      ctx.font = "bold " + (8 * this.roleScale) + "px monospace";
+      ctx.font = "bold " + (7 * this.roleScale) + "px monospace";
       ctx.textAlign = "center";
       ctx.textBaseline = "bottom";
-      ctx.fillText("Nv" + this.level, 0, -this.bodyWidth/2 - 10 * this.roleScale);
+      ctx.fillText("Nv" + this.level, 0, barY2 - 2);
       
       if (this.isPlayer) {
         ctx.fillStyle = "#2ecc71";
@@ -2949,7 +2990,6 @@
   function spawnWave() {
     waveNumber++;
     document.getElementById("wave-number").textContent = waveNumber;
-    document.getElementById("wave-number-display").textContent = "OLEADA " + waveNumber;
     const currentMinions = entities.reduce((n, e) => n + (e instanceof Minion && e.isAlive() ? 1 : 0), 0);
     if (currentMinions >= MAX_MINIONS) return;
 
@@ -2972,6 +3012,24 @@
         addMoneyToTank(e, 30 + waveNumber * 3);
       }
     }
+  }
+
+  // ============================================================
+  // FUNCIONES PARA VERIFICAR ALIADOS CERCA DEL NEXO
+  // ============================================================
+  function hasAlliesNearNexus(nexus) {
+    const range = 300;
+    for (const e of entities) {
+      if (e.team === nexus.team && e.isAlive()) {
+        if (e instanceof Tank || e instanceof Minion) {
+          const dist = Math.hypot(e.x - nexus.x, e.y - nexus.y);
+          if (dist < range) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 
   // ============================================================
@@ -3024,8 +3082,8 @@
         minimapCtx.fillRect(x - 1.5, y - 1.5, 3, 3);
       } else if (e instanceof Tank) {
         minimapCtx.shadowBlur = 0;
-        const size = e.isTank ? 5 : (e.isFast ? 3 : 4);
-        minimapCtx.fillStyle = e.isPlayer ? "#f0e6d2" : (e.color || (e.team === "blue" ? "#3498db" : "#e74c3c"));
+        const size = e.isHelicopter ? 4 : (e.isTank ? 5 : (e.isFast ? 3 : 4));
+        minimapCtx.fillStyle = e.isHelicopter ? "#2ecc71" : (e.isPlayer ? "#f0e6d2" : (e.color || (e.team === "blue" ? "#3498db" : "#e74c3c")));
         minimapCtx.beginPath();
         minimapCtx.arc(x, y, e.isPlayer ? 4.5 : size, 0, Math.PI * 2);
         minimapCtx.fill();
@@ -3052,7 +3110,8 @@
     cooldown: document.getElementById("cooldown-text"),
     fps: document.getElementById("fps-value"),
     nexusBlue: document.getElementById("nexus-blue-hp"),
-    nexusRed: document.getElementById("nexus-red-hp")
+    nexusRed: document.getElementById("nexus-red-hp"),
+    waveNumber: document.getElementById("wave-number")
   };
 
   function updatePlayerStats() {
@@ -3060,8 +3119,8 @@
     const pct = Math.max(0, playerTank.hp / playerTank.maxHp);
     el.hpText.textContent = Math.floor(playerTank.hp) + "/" + playerTank.maxHp;
     el.hpFill.style.width = pct * 100 + "%";
-    el.hpFill.className = "fill" + (pct < 0.25 ? " low" : pct < 0.5 ? " medium" : "");
-    el.hpText.className = "value hp-text" + (pct < 0.25 ? " low" : pct < 0.5 ? " medium" : "");
+    el.hpFill.className = "bar-fill" + (pct < 0.25 ? " low" : pct < 0.5 ? " medium" : "");
+    el.hpText.className = "stat-value hp-text" + (pct < 0.25 ? " low" : pct < 0.5 ? " medium" : "");
     el.kills.textContent = playerTank.kills || 0;
     el.deaths.textContent = playerTank.deaths || 0;
 
@@ -3076,6 +3135,7 @@
   function updateNexusUI() {
     if (nexusBlue) el.nexusBlue.textContent = Math.max(0, Math.round((nexusBlue.hp / nexusBlue.maxHp) * 100)) + "%";
     if (nexusRed) el.nexusRed.textContent = Math.max(0, Math.round((nexusRed.hp / nexusRed.maxHp) * 100)) + "%";
+    el.waveNumber.textContent = waveNumber;
   }
 
   function showEndScreen(win) {
@@ -3220,10 +3280,22 @@
     drawNexusWalls();
     drawTracks();
     
-    for (const e of entities) if (e instanceof Tank) e.draw();
-    for (const e of entities) if (e instanceof Tower) e.draw();
-    for (const e of entities) if (e instanceof Minion) e.draw();
-    for (const e of entities) if (e instanceof Nexus) e.draw();
+    // ORDEN DE DIBUJO: TANQUES → NEXOS → TORRES → MINIONS → HELICÓPTEROS
+    for (const e of entities) {
+      if (e instanceof Tank && !e.isHelicopter) e.draw();
+    }
+    for (const e of entities) {
+      if (e instanceof Nexus) e.draw();
+    }
+    for (const e of entities) {
+      if (e instanceof Tower) e.draw();
+    }
+    for (const e of entities) {
+      if (e instanceof Minion) e.draw();
+    }
+    for (const e of entities) {
+      if (e instanceof Tank && e.isHelicopter) e.draw();
+    }
     
     drawProjectiles();
     drawHitEffects();
