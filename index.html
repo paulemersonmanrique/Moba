@@ -310,6 +310,11 @@
     ]
   };
 
+  const LANE_COLORS = {
+    blue: "#2ecc71",
+    red: "#e74c3c"
+  };
+
   const ROLES = {
     healer: { color: "#2ecc71", name: "HELICÓPTERO", hp: 0.85, dmg: 0.75, spd: 1.3, range: 1.5, isHealer: true },
     strong: { color: "#e67e22", name: "FUERTE", hp: 1.0, dmg: 1.8, spd: 0.85, range: 1.3 },
@@ -349,21 +354,16 @@
   let waveNumber = 0;
   let lastUIUpdate = 0;
 
-  const teamLevelSystem = {
-    blue: { tanks: { level: 1, exp: 0, expToNext: 80 }, minions: { level: 1, exp: 0, expToNext: 60 } },
-    red: { tanks: { level: 1, exp: 0, expToNext: 80 }, minions: { level: 1, exp: 0, expToNext: 60 } }
-  };
-
   // ============================================================
-  // FUNCIÓN HELICÓPTERO (DIBUJO)
+  // FUNCIÓN HELICÓPTERO - 35px × 15px
   // ============================================================
   function drawHelicopter(ctx, x, y, angle, team, rotorAngle, scale) {
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(angle);
     
-    const s = scale || 1.2;
-    const narrowFactor = 0.6;
+    // TAMAÑO: 35px de largo × 15px de ancho
+    const s = (scale || 1.2) * 1;  // 60% del original = ~35px × 15px
     
     let mainColor, darkColor, lightColor;
     if (team === 'blue') {
@@ -388,44 +388,48 @@
     ctx.strokeStyle = 'rgba(241,196,15,0.15)';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.ellipse(0, 0, 6 * s, 2 * s * narrowFactor, 0, 0, Math.PI * 2);
+    ctx.ellipse(0, 0, 7 * s, 1 * s, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
     ctx.restore();
     
+    // Cola
     ctx.fillStyle = darkColor;
-    ctx.fillRect(-28 * s, -2.5 * s * narrowFactor, 12 * s, 5 * s * narrowFactor);
+    ctx.fillRect(-28 * s, -2.5 * s, 15 * s, 5 * s);
     ctx.strokeStyle = mainColor;
     ctx.lineWidth = 0.5;
-    ctx.strokeRect(-28 * s, -2.5 * s * narrowFactor, 12 * s, 5 * s * narrowFactor);
+    ctx.strokeRect(-28 * s, -2.5 * s, 15 * s, 5 * s);
     
+    // Cuerpo trasero
     ctx.fillStyle = darkColor;
     ctx.beginPath();
-    ctx.ellipse(-16 * s, 0, 8 * s, 6 * s * narrowFactor, 0, 0, Math.PI * 2);
+    ctx.ellipse(-16 * s, 0, 7 * s, 3 * s, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.strokeStyle = mainColor;
     ctx.lineWidth = 0.5;
     ctx.stroke();
     
+    // Estabilizadores
     ctx.save();
-    ctx.translate(-4 * s, -12 * s * narrowFactor);
+    ctx.translate(-4 * s, -10 * s);
     ctx.fillStyle = 'rgba(241,196,15,0.12)';
-    ctx.fillRect(-12 * s, -1.5 * s * narrowFactor, 14 * s, 3 * s * narrowFactor);
+    ctx.fillRect(-10 * s, -1.5 * s, 12 * s, 3 * s);
     ctx.strokeStyle = 'rgba(241,196,15,0.06)';
     ctx.lineWidth = 0.5;
-    ctx.strokeRect(-12 * s, -1.5 * s * narrowFactor, 14 * s, 3 * s * narrowFactor);
+    ctx.strokeRect(-10 * s, -1.5 * s, 15 * s, 5 * s);
     ctx.restore();
     
     ctx.save();
-    ctx.translate(-4 * s, 12 * s * narrowFactor);
+    ctx.translate(-4 * s, 10 * s);
     ctx.fillStyle = 'rgba(241,196,15,0.12)';
-    ctx.fillRect(-12 * s, -1.5 * s * narrowFactor, 14 * s, 3 * s * narrowFactor);
+    ctx.fillRect(-10 * s, -1.5 * s, 12 * s, 3 * s);
     ctx.strokeStyle = 'rgba(241,196,15,0.06)';
     ctx.lineWidth = 0.5;
-    ctx.strokeRect(-12 * s, -1.5 * s * narrowFactor, 14 * s, 3 * s * narrowFactor);
+    ctx.strokeRect(-10 * s, -1.5 * s, 12 * s, 3 * s);
     ctx.restore();
     
-    const grad = ctx.createRadialGradient(0, -2 * s * narrowFactor, 2 * s, 0, 0, 18 * s);
+    // Cuerpo principal - 35px × 15px
+    const grad = ctx.createRadialGradient(0, -2 * s, 2 * s, 0, 0, 18 * s);
     grad.addColorStop(0, lightColor);
     grad.addColorStop(0.4, mainColor);
     grad.addColorStop(1, darkColor);
@@ -433,13 +437,14 @@
     ctx.shadowColor = mainColor;
     ctx.shadowBlur = 8 * s;
     ctx.beginPath();
-    ctx.ellipse(0, 0, 18 * s, 13 * s * narrowFactor, 0, 0, Math.PI * 2);
+    ctx.ellipse(0, 0, 16 * s, 5 * s, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowBlur = 0;
     ctx.strokeStyle = 'rgba(255,255,255,0.04)';
     ctx.lineWidth = 0.5;
     ctx.stroke();
     
+    // Rotor principal
     ctx.save();
     ctx.translate(0, 0);
     ctx.rotate(rotorAngle);
@@ -490,52 +495,55 @@
     ctx.fill();
     ctx.restore();
     
+    // Cabina
     ctx.fillStyle = 'rgba(100,180,255,0.1)';
     ctx.strokeStyle = 'rgba(100,180,255,0.05)';
     ctx.lineWidth = 0.5;
     ctx.beginPath();
-    ctx.ellipse(10 * s, 0, 8 * s, 6 * s * narrowFactor, 0, 0, Math.PI * 2);
+    ctx.ellipse(10 * s, 0, 8 * s, 6 * s, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
     
+    // Lanzamisiles
     ctx.save();
-    ctx.translate(12 * s, -6 * s * narrowFactor);
+    ctx.translate(12 * s, -7.2 * s);
     ctx.fillStyle = darkColor;
-    ctx.fillRect(0, 0, 6 * s, 3 * s * narrowFactor);
+    ctx.fillRect(0, 0, 5 * s, 3 * s);
     ctx.strokeStyle = 'rgba(231,76,60,0.2)';
     ctx.lineWidth = 0.5;
-    ctx.strokeRect(0, 0, 6 * s, 3 * s * narrowFactor);
+    ctx.strokeRect(0, 0, 5 * s, 3 * s);
     ctx.fillStyle = '#e74c3c';
     ctx.shadowColor = '#e74c3c';
     ctx.shadowBlur = 4 * s;
     ctx.beginPath();
-    ctx.arc(2 * s, 1.5 * s * narrowFactor, 1.2 * s, 0, Math.PI * 2);
+    ctx.arc(2 * s, 1.5 * s, 1.2 * s, 0, Math.PI * 2);
     ctx.fill();
     ctx.beginPath();
-    ctx.arc(4.5 * s, 1.5 * s * narrowFactor, 1.2 * s, 0, Math.PI * 2);
+    ctx.arc(4 * s, 1.5 * s, 1.2 * s, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowBlur = 0;
     ctx.restore();
     
     ctx.save();
-    ctx.translate(12 * s, 6 * s * narrowFactor);
+    ctx.translate(12 * s, 5 * s);
     ctx.fillStyle = darkColor;
-    ctx.fillRect(0, 0, 6 * s, 3 * s * narrowFactor);
+    ctx.fillRect(0, 0, 5 * s, 3 * s);
     ctx.strokeStyle = 'rgba(231,76,60,0.2)';
     ctx.lineWidth = 0.5;
-    ctx.strokeRect(0, 0, 6 * s, 3 * s * narrowFactor);
+    ctx.strokeRect(0, 0, 5 * s, 3 * s);
     ctx.fillStyle = '#e74c3c';
     ctx.shadowColor = '#e74c3c';
     ctx.shadowBlur = 4 * s;
     ctx.beginPath();
-    ctx.arc(2 * s, 1.5 * s * narrowFactor, 1.2 * s, 0, Math.PI * 2);
+    ctx.arc(2 * s, 1.5 * s, 1.2 * s, 0, Math.PI * 2);
     ctx.fill();
     ctx.beginPath();
-    ctx.arc(4.5 * s, 1.5 * s * narrowFactor, 1.2 * s, 0, Math.PI * 2);
+    ctx.arc(4 * s, 1.5 * s, 1.2 * s, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowBlur = 0;
     ctx.restore();
     
+    // Faro
     ctx.fillStyle = '#f1c40f';
     ctx.globalAlpha = 0.2 + Math.sin(Date.now() / 300) * 0.1;
     ctx.beginPath();
@@ -695,93 +703,93 @@
   }
 
   // ============================================================
-  // FONDO CON LÍNEAS DE COLORES
+  // FONDO
   // ============================================================
   function drawBackground() {
     ctx.fillStyle = "#12121f";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
     ctx.save();
+    ctx.globalAlpha = 0.025;
+    ctx.strokeStyle = "#c8aa6e";
+    ctx.lineWidth = 0.5;
     
-    const step = 60;
+    const step = 80;
     const startX = -(camera.x % step);
     const startY = -(camera.y % step);
     
-    // Líneas AZUL (verde)
-    ctx.globalAlpha = 0.15;
-    ctx.strokeStyle = "#2ecc71";
-    ctx.lineWidth = 0.8;
     for (let x = startX; x < canvas.width; x += step) {
-      const wx = x + camera.x;
-      if (wx < MAP_W / 2) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
-        ctx.stroke();
-      }
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, canvas.height);
+      ctx.stroke();
     }
     for (let y = startY; y < canvas.height; y += step) {
-      const wy = y + camera.y;
-      if (wy < MAP_H / 2) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
-        ctx.stroke();
-      }
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(canvas.width, y);
+      ctx.stroke();
     }
     
-    // Líneas ROJO (rojo)
-    ctx.strokeStyle = "#e74c3c";
-    ctx.globalAlpha = 0.15;
-    for (let x = startX; x < canvas.width; x += step) {
-      const wx = x + camera.x;
-      if (wx >= MAP_W / 2) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
-        ctx.stroke();
-      }
-    }
-    for (let y = startY; y < canvas.height; y += step) {
-      const wy = y + camera.y;
-      if (wy >= MAP_H / 2) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
-        ctx.stroke();
-      }
-    }
+    ctx.globalAlpha = 1;
+    ctx.restore();
     
-    // Línea divisoria
-    ctx.globalAlpha = 0.2;
-    ctx.strokeStyle = "#c8aa6e";
-    ctx.lineWidth = 1.5;
-    ctx.setLineDash([10, 15]);
-    const cx = MAP_W / 2 - camera.x;
-    ctx.beginPath();
-    ctx.moveTo(cx, 0);
-    ctx.lineTo(cx, canvas.height);
-    ctx.stroke();
-    const cy = MAP_H / 2 - camera.y;
-    ctx.beginPath();
-    ctx.moveTo(0, cy);
-    ctx.lineTo(canvas.width, cy);
-    ctx.stroke();
-    ctx.setLineDash([]);
+    ctx.save();
     
-    // Carriles
-    ctx.globalAlpha = 0.08;
-    ctx.strokeStyle = "#c8aa6e";
-    ctx.lineWidth = 1.5;
     for (const lane of LANES) {
       const path = LANE_PATHS[lane];
+      
+      ctx.globalAlpha = 0.35;
+      ctx.strokeStyle = LANE_COLORS.blue;
+      ctx.lineWidth = 3;
+      ctx.shadowColor = LANE_COLORS.blue;
+      ctx.shadowBlur = 8;
       ctx.beginPath();
       ctx.moveTo(path[0].x - camera.x, path[0].y - camera.y);
       for (let i = 1; i < path.length; i++) {
         ctx.lineTo(path[i].x - camera.x, path[i].y - camera.y);
       }
       ctx.stroke();
+      
+      ctx.globalAlpha = 0.35;
+      ctx.strokeStyle = LANE_COLORS.red;
+      ctx.lineWidth = 3;
+      ctx.shadowColor = LANE_COLORS.red;
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      const reversePath = path.slice().reverse();
+      ctx.moveTo(reversePath[0].x - camera.x, reversePath[0].y - camera.y);
+      for (let i = 1; i < reversePath.length; i++) {
+        ctx.lineTo(reversePath[i].x - camera.x, reversePath[i].y - camera.y);
+      }
+      ctx.stroke();
+      
+      ctx.globalAlpha = 0.2;
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 1;
+      ctx.shadowBlur = 4;
+      ctx.shadowColor = "rgba(255,255,255,0.2)";
+      ctx.setLineDash([6, 12]);
+      ctx.beginPath();
+      ctx.moveTo(path[0].x - camera.x, path[0].y - camera.y);
+      for (let i = 1; i < path.length; i++) {
+        ctx.lineTo(path[i].x - camera.x, path[i].y - camera.y);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+      
+      ctx.globalAlpha = 0.15;
+      for (const p of path) {
+        ctx.fillStyle = "#c8aa6e";
+        ctx.shadowColor = "#c8aa6e";
+        ctx.shadowBlur = 4;
+        ctx.beginPath();
+        ctx.arc(p.x - camera.x, p.y - camera.y, 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
+    
+    ctx.shadowBlur = 0;
     ctx.globalAlpha = 1;
     ctx.restore();
   }
@@ -863,20 +871,6 @@
     const nexus = getNexusForTeam(tank.team);
     if (!nexus || !nexus.isAlive()) return false;
     return Math.hypot(tank.x - nexus.x, tank.y - nexus.y) < SHOP_RADIUS;
-  }
-
-  function isNexusInDanger(team) {
-    const nexus = getNexusForTeam(team);
-    if (!nexus || !nexus.isAlive()) return true;
-    if (nexus.hp < nexus.maxHp * 0.35) return true;
-    
-    const range = 350;
-    for (const e of entities) {
-      if (!e.isAlive() || e.team === team) continue;
-      const dist = Math.hypot(e.x - nexus.x, e.y - nexus.y);
-      if (dist < range) return true;
-    }
-    return false;
   }
 
   function buyUpgradeForTank(tank, type) {
@@ -1059,54 +1053,45 @@
     enemyContainer.innerHTML = '<div class="hp-bar-side-title">ENEMIGOS</div>';
 
     const tanks = entities.filter(e => e instanceof Tank && e.isAlive());
-    const towers = entities.filter(e => e instanceof Tower && e.isAlive());
     
-    const allAllies = tanks.filter(t => t.team === playerTeam);
-    const allEnemies = tanks.filter(t => t.team !== playerTeam);
-    
-    const allyTowers = towers.filter(t => t.team === playerTeam);
-    const enemyTowers = towers.filter(t => t.team !== playerTeam);
+    const allies = tanks.filter(t => t.team === playerTeam);
+    const enemies = tanks.filter(t => t.team !== playerTeam);
 
-    function sortEntities(a, b) {
+    allies.sort((a, b) => {
       if (a.isPlayer) return -1;
       if (b.isPlayer) return 1;
-      if (a instanceof Tower && !(b instanceof Tower)) return -1;
-      if (!(a instanceof Tower) && b instanceof Tower) return 1;
       return (a.role || "").localeCompare(b.role || "");
-    }
+    });
+    enemies.sort((a, b) => (a.role || "").localeCompare(b.role || ""));
 
-    const allAlliesSorted = [...allAllies, ...allyTowers].sort(sortEntities);
-    const allEnemiesSorted = [...allEnemies, ...enemyTowers].sort(sortEntities);
-
-    function createHpEntry(entity, isAlly) {
+    function createHpEntry(tank, isAlly) {
       const div = document.createElement("div");
-      const isTower = entity instanceof Tower;
-      div.className = "hp-bar-entry" + (entity.isPlayer ? " player-entry" : "") + (isAlly ? "" : " enemy-entry");
+      div.className = "hp-bar-entry" + (tank.isPlayer ? " player-entry" : "") + (isAlly ? "" : " enemy-entry");
       
-      const pct = Math.max(0, (entity.hp / entity.maxHp) * 100);
+      const pct = Math.max(0, (tank.hp / tank.maxHp) * 100);
       const color = pct > 60 ? "#2ecc71" : pct > 30 ? "#f1c40f" : "#e74c3c";
       
-      const name = entity.isPlayer ? "JUGADOR" : (isTower ? "TORRE" : (ROLES[entity.role]?.name || entity.role || "TANQUE"));
+      const roleInfo = ROLES[tank.role] || { name: "TANQUE" };
       
       div.innerHTML = `
-        <span class="name" style="color:${entity.isPlayer ? "#2ecc71" : (isAlly ? "#5dade2" : "#ec7063")}">
-          ${name}
+        <span class="name" style="color:${tank.isPlayer ? "#2ecc71" : (isAlly ? "#5dade2" : "#ec7063")}">
+          ${tank.isPlayer ? "JUGADOR" : (roleInfo.name || tank.role || "TANQUE")}
         </span>
-        <span class="role-text">${isTower ? "Nv"+entity.tier : "Lv"+entity.level}</span>
+        <span class="role-text">Lv${tank.level}</span>
         <div class="hp-bar-mini">
           <div class="fill" style="width:${pct}%; background:${color};"></div>
         </div>
-        <span class="hp-text" style="color:${color}">${Math.floor(entity.hp)}/${entity.maxHp}</span>
+        <span class="hp-text" style="color:${color}">${Math.floor(tank.hp)}/${tank.maxHp}</span>
       `;
       return div;
     }
 
-    for (const entity of allAlliesSorted) {
-      allyContainer.appendChild(createHpEntry(entity, true));
+    for (const tank of allies) {
+      allyContainer.appendChild(createHpEntry(tank, true));
     }
 
-    for (const entity of allEnemiesSorted) {
-      enemyContainer.appendChild(createHpEntry(entity, false));
+    for (const tank of enemies) {
+      enemyContainer.appendChild(createHpEntry(tank, false));
     }
   }
 
@@ -1118,19 +1103,27 @@
     if (!isNearNexus(tank)) return;
     if ((tank.money || 0) < 100) return;
 
-    let priorities = [];
+    const priorities = [];
     const role = tank.role;
 
-    if (tank.isHelicopter) {
-      priorities = ['speed', 'speed', 'dmg', 'range', 'hp', 'heal'];
-    } else {
-      switch(role) {
-        case 'tank': priorities = ['hp', 'hp', 'dmg', 'range']; break;
-        case 'strong': priorities = ['dmg', 'dmg', 'range', 'speed']; break;
-        case 'double': priorities = ['dmg', 'speed', 'range', 'hp']; break;
-        case 'fast': priorities = ['speed', 'speed', 'dmg', 'hp']; break;
-        default: priorities = ['hp', 'dmg', 'speed'];
-      }
+    switch(role) {
+      case 'tank':
+        priorities.push('hp', 'hp', 'dmg', 'range');
+        break;
+      case 'healer':
+        priorities.push('heal', 'heal', 'speed', 'hp');
+        break;
+      case 'strong':
+        priorities.push('dmg', 'dmg', 'range', 'speed');
+        break;
+      case 'double':
+        priorities.push('dmg', 'speed', 'range', 'hp');
+        break;
+      case 'fast':
+        priorities.push('speed', 'speed', 'dmg', 'hp');
+        break;
+      default:
+        priorities.push('hp', 'dmg', 'speed');
     }
 
     for (const type of priorities) {
@@ -1234,7 +1227,7 @@
   }
 
   // ============================================================
-  // FUNCIONES AUXILIARES
+  // FUNCIÓN PARA VERIFICAR ENEMIGOS CERCA
   // ============================================================
   function countEnemiesNear(entity, range) {
     let count = 0;
@@ -1246,6 +1239,9 @@
     return count;
   }
 
+  // ============================================================
+  // FUNCIÓN PARA VERIFICAR ALIADOS CERCA
+  // ============================================================
   function countAlliesNear(entity, range) {
     let count = 0;
     for (const e of entities) {
@@ -1255,45 +1251,6 @@
       if (dist < range) count++;
     }
     return count;
-  }
-
-  function countEnemiesNearPosition(x, y, range, team) {
-    let count = 0;
-    for (const e of entities) {
-      if (!e.isAlive() || e.team === team) continue;
-      const dist = Math.hypot(e.x - x, e.y - y);
-      if (dist < range) count++;
-    }
-    return count;
-  }
-
-  function countAlliesNearPosition(x, y, range, team) {
-    let count = 0;
-    for (const e of entities) {
-      if (!e.isAlive() || e.team !== team) continue;
-      const dist = Math.hypot(e.x - x, e.y - y);
-      if (dist < range) count++;
-    }
-    return count;
-  }
-
-  // ============================================================
-  // FUNCIÓN DODGE ELIMINADA - Los tanques ya no esquivan
-  // ============================================================
-
-  function hasAlliesNearNexus(nexus) {
-    const range = 300;
-    for (const e of entities) {
-      if (e.team === nexus.team && e.isAlive()) {
-        if (e instanceof Tank || e instanceof Minion) {
-          const dist = Math.hypot(e.x - nexus.x, e.y - nexus.y);
-          if (dist < range) {
-            return true;
-          }
-        }
-      }
-    }
-    return false;
   }
 
   // ============================================================
@@ -1381,11 +1338,11 @@
   }
 
   // ============================================================
-  // HUELLAS
+  // HUELLAS CON ANCHO PROPORCIONAL
   // ============================================================
   function addTrack(x, y, angle, color, width) {
     if (tracks.length > 300) tracks.shift();
-    tracks.push({ x, y, angle, life: 2.5, color, width: width || 12 });
+    tracks.push({ x, y, angle, life: 2.5, color, width: width || 6 });
     if (Math.random() < 0.08) {
       playTrackSound();
     }
@@ -1405,56 +1362,48 @@
       ctx.globalAlpha = Math.max(0, t.life / 2.5) * 0.15;
       ctx.translate(t.x - camera.x, t.y - camera.y);
       ctx.rotate(t.angle);
-      const w = t.width || 12;
+      const w = t.width || 6;
       ctx.fillStyle = t.color;
-      ctx.fillRect(-w/2, -w/2 - 2, w, 4);
-      ctx.fillRect(-w/2, w/2 - 2, w, 4);
+      ctx.fillRect(-w/2, -w/2 - 2, w, 3);
+      ctx.fillRect(-w/2, w/2 - 1, w, 3);
       ctx.restore();
     }
     ctx.globalAlpha = 1;
   }
 
   // ============================================================
-  // EXPERIENCIA DE EQUIPO
+  // SISTEMA DE EXPERIENCIA INDIVIDUAL
   // ============================================================
-  function addTeamExp(team, type, amount) {
-    const system = teamLevelSystem[team];
-    if (!system) return;
-    const data = system[type];
-    if (!data) return;
-
-    data.exp += amount;
+  function addIndividualExp(tank, amount) {
+    if (!tank || !tank.isAlive()) return;
+    
+    if (tank.individualExp === undefined) {
+      tank.individualExp = 0;
+      tank.individualLevel = 1;
+      tank.individualExpToNext = 80;
+    }
+    
+    tank.individualExp += amount;
     let leveled = false;
     let guard = 10;
-    while (data.exp >= data.expToNext && data.level < 18 && guard-- > 0) {
-      data.exp -= data.expToNext;
-      data.level++;
-      data.expToNext = Math.floor(data.expToNext * 1.55);
+    
+    while (tank.individualExp >= tank.individualExpToNext && tank.individualLevel < 20 && guard-- > 0) {
+      tank.individualExp -= tank.individualExpToNext;
+      tank.individualLevel++;
+      tank.individualExpToNext = Math.floor(tank.individualExpToNext * 1.55);
       leveled = true;
     }
+    
     if (leveled) {
-      if (team === playerTeam && type === "tanks") playLevelUpSound();
-      applyTeamLevelUp(team, type);
-    }
-  }
-
-  function applyTeamLevelUp(team, type) {
-    const level = teamLevelSystem[team][type].level;
-    for (const e of entities) {
-      if (!e.isAlive()) continue;
-      if (e.team !== team) continue;
-      if (type === "tanks" && e instanceof Tank) {
-        e.level = level;
-        e.applyStats(true);
-      } else if (type === "minions" && e instanceof Minion) {
-        e.level = level;
-        e.applyStats(true);
-      } else if (type === "tanks" && e instanceof Tower) {
-        e.tier = Math.min(e.tier + 1, 5);
-        e.applyStats(true);
+      tank.level = tank.individualLevel;
+      tank.applyStats(true);
+      spawnParticles(tank.x, tank.y, "#f1c40f", 20, 60);
+      if (tank.isPlayer) {
+        playLevelUpSound();
+        showNotification("¡NIVEL SUBIDO! Lv." + tank.individualLevel, "#f1c40f");
+        updatePlayerStats();
       }
     }
-    if (playerTank) updatePlayerStats();
   }
 
   // ============================================================
@@ -1467,8 +1416,8 @@
     let speed = opts.speed || 420;
     
     if (opts.isHelicopterBullet) {
-      radius = radius * 0.25;
-      speed = speed * 1.3;
+      radius = radius * 0.5;
+      speed = speed * 1.2;
     }
     
     const range = opts.range || 280;
@@ -1491,9 +1440,7 @@
       isMissile: opts.isMissile || false,
       isNexusMachineGun: opts.isNexusMachineGun || false,
       soundPlayed: false,
-      isHelicopterBullet: opts.isHelicopterBullet || false,
-      isTowerBullet: opts.isTower || false,
-      isTower: opts.isTower || false
+      isHelicopterBullet: opts.isHelicopterBullet || false
     });
     
     if (opts.isPlayer) {
@@ -1555,11 +1502,22 @@
         spawnParticles(p.x, p.y, p.color, 6, 35);
         playImpactSound();
         projectiles.splice(i, 1);
+        
         if (!hit.isAlive && hit.isAlive !== undefined && !hit.isAlive() && p.owner && p.owner.isAlive && p.owner.isAlive()) {
           const reward = 30 + Math.floor(Math.random() * 20);
           addMoneyToTank(p.owner, reward);
-          const type = p.owner instanceof Minion ? "minions" : "tanks";
-          addTeamExp(p.owner.team, type, 10);
+          
+          const expGain = 10 + Math.floor(Math.random() * 5);
+          addIndividualExp(p.owner, expGain);
+          
+          for (const e of entities) {
+            if (e === p.owner) continue;
+            if (!(e instanceof Tank) || e.team !== p.owner.team || !e.isAlive()) continue;
+            const dist = Math.hypot(e.x - hit.x, e.y - hit.y);
+            if (dist < 300) {
+              addIndividualExp(e, Math.floor(expGain * 0.3));
+            }
+          }
         }
       }
     }
@@ -1604,13 +1562,13 @@
       } else {
         ctx.fillStyle = p.color;
         ctx.shadowColor = p.color;
-        ctx.shadowBlur = p.isHelicopterBullet ? 2 : 6;
+        ctx.shadowBlur = p.isHelicopterBullet ? 3 : 6;
         ctx.beginPath();
         ctx.arc(sx, sy, p.radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.shadowBlur = 0;
         ctx.fillStyle = "#fff";
-        ctx.globalAlpha = p.isHelicopterBullet ? 0.1 : 0.3;
+        ctx.globalAlpha = p.isHelicopterBullet ? 0.2 : 0.3;
         ctx.beginPath();
         ctx.arc(sx - p.radius * 0.2, sy - p.radius * 0.2, p.radius * 0.3, 0, Math.PI * 2);
         ctx.fill();
@@ -1639,7 +1597,10 @@
       this.kills = 0;
       this.deaths = 0;
       this.baseAttackRange = 0;
-      this.currentTarget = null;
+      
+      this.individualExp = 0;
+      this.individualLevel = 1;
+      this.individualExpToNext = 80;
     }
     isAlive() { return this.alive && this.hp > 0; }
     enemyTeam() { return this.team === "blue" ? "red" : "blue"; }
@@ -1656,11 +1617,24 @@
       this.alive = false;
       const color = this.team === "blue" ? "#3498db" : "#e74c3c";
       createExplosion(this.x, this.y, color, 2);
+      
       if (source && source.isAlive && source.isAlive()) {
         source.kills = (source.kills || 0) + 1;
-        const type = source instanceof Minion ? "minions" : "tanks";
-        addTeamExp(source.team, type, this.expValue);
-        addTeamExp(source.team, type === "tanks" ? "minions" : "tanks", Math.floor(this.expValue * 0.3));
+        
+        const expGain = this.expValue + Math.floor(Math.random() * 5);
+        if (source instanceof Tank) {
+          addIndividualExp(source, expGain);
+          
+          for (const e of entities) {
+            if (e === source) continue;
+            if (!(e instanceof Tank) || e.team !== source.team || !e.isAlive()) continue;
+            const dist = Math.hypot(e.x - this.x, e.y - this.y);
+            if (dist < 300) {
+              addIndividualExp(e, Math.floor(expGain * 0.3));
+            }
+          }
+        }
+        
         if (source.isPlayer) updatePlayerStats();
       }
     }
@@ -1699,9 +1673,7 @@
         isTank: this instanceof Tank && !this.isPlayer,
         isMachineGun: opts && opts.isMachineGun || false,
         isMissile: opts && opts.isMissile || false,
-        isHelicopterBullet: opts && opts.isHelicopterBullet || false,
-        tower: opts && opts.tower || false,
-        isTower: opts && opts.isTower || false
+        isHelicopterBullet: opts && opts.isHelicopterBullet || false
       });
       this.shootCooldown = this.attackCooldown;
     }
@@ -1912,6 +1884,24 @@
         ctx.arc(0, 0, 20, 0, Math.PI * 2);
         ctx.stroke();
         
+        if (this.machineGunMode) {
+          ctx.fillStyle = "#ff6b6b";
+          ctx.globalAlpha = 0.5;
+          ctx.font = "bold 8px monospace";
+          ctx.textBaseline = "bottom";
+          ctx.fillText("AMETRALLADORA", 0, -48);
+          ctx.globalAlpha = 1;
+        }
+        
+        if (this.consecutiveHits > 1 && this.currentTarget && this.currentTarget.isAlive()) {
+          ctx.fillStyle = "#f1c40f";
+          ctx.globalAlpha = 0.4;
+          ctx.font = "bold 8px monospace";
+          ctx.textBaseline = "top";
+          ctx.fillText("x" + Math.pow(2, this.consecutiveHits).toFixed(0), 0, 40);
+          ctx.globalAlpha = 1;
+        }
+        
         ctx.fillStyle = "rgba(200,170,110,0.15)";
         ctx.font = "6px monospace";
         ctx.textBaseline = "bottom";
@@ -1934,12 +1924,6 @@
         ctx.textAlign = "center";
         ctx.fillText(Math.floor(this.hp) + "/" + this.maxHp, 0, barY - 2);
         
-        ctx.fillStyle = "rgba(255,255,255,0.1)";
-        ctx.font = "bold 14px monospace";
-        ctx.textBaseline = "middle";
-        ctx.textAlign = "center";
-        ctx.fillText(this.team === "blue" ? "🔵" : "🔴", 0, 60);
-        
       } else {
         ctx.globalAlpha = 0.4;
         ctx.fillStyle = "#555";
@@ -1953,23 +1937,21 @@
   }
 
   // ============================================================
-  // TORRE - CON BASE REDONDA
+  // TORRE
   // ============================================================
   class Tower extends Entity {
     constructor(x, y, team, lane, tier) {
       super(x, y, team);
       this.lane = lane;
-      this.tier = Math.min(tier, 5);
+      this.tier = tier;
       this.maxHp = TOWER_HP;
       this.hp = this.maxHp;
       this.collisionRadius = 44;
-      this.baseAttackRange = 300 + (this.tier - 1) * 10;
+      this.baseAttackRange = 300 + (tier - 1) * 10;
       this.attackRange = this.baseAttackRange;
-      this.baseDamage = 18 + this.tier * 2;
-      this.attackDamage = this.baseDamage;
+      this.attackDamage = 18 + tier * 2;
       this.attackCooldown = 0.8;
-      this.machineGunCooldown = 0.12;
-      this.expValue = 60 + this.tier * 10;
+      this.expValue = 60 + tier * 10;
       this.angle = 0;
       this.cannonAngle = 0;
       this.targetAngle = 0;
@@ -1981,9 +1963,7 @@
       this.currentTarget = null;
       this.hasShield = false;
       this.shieldCheckTimer = 0;
-      this.machineGunTimer = 0;
-      this.level = tier;
-      this.isMachineGunMode = false;
+      this.machineGunMode = false;
     }
     applyStats(keepRatio) {
       this.tier = Math.min(this.tier, 5);
@@ -1991,8 +1971,7 @@
       this.maxHp = TOWER_HP + (this.tier - 1) * 200;
       this.hp = Math.max(1, Math.round(this.maxHp * ratio));
       this.baseAttackRange = 300 + (this.tier - 1) * 15;
-      this.baseDamage = 18 + this.tier * 3;
-      this.attackDamage = this.baseDamage;
+      this.attackDamage = 18 + this.tier * 3;
       this.attackRange = this.baseAttackRange;
     }
     die(source) {
@@ -2012,20 +1991,25 @@
       this.attackRange = Math.min(this.attackRange, this.baseAttackRange * 2.2);
       
       const allyCount = countAlliesNear(this, 250);
-      this.isMachineGunMode = allyCount < 2;
+      this.machineGunMode = allyCount < 2;
       
       this.shieldCheckTimer -= dt;
       if (this.shieldCheckTimer <= 0) {
         this.shieldCheckTimer = 0.5;
         const hasAllies = hasAlliesNearNexus(this);
         this.hasShield = !hasAllies;
+        if (this.hasShield && this.hp === this.maxHp) {
+          this.maxHp = 2000;
+          this.hp = this.maxHp;
+        } else if (!this.hasShield && this.maxHp > 1000) {
+          const ratio = this.hp / this.maxHp;
+          this.maxHp = 1000;
+          this.hp = Math.min(this.maxHp, this.hp);
+        }
       }
       
       this.shootCooldown -= dt;
-      this.machineGunTimer -= dt;
-      
       const target = this.findTarget(this.attackRange);
-      this.currentTarget = target;
       
       if (target) {
         this.targetAngle = Math.atan2(target.y - this.y, target.x - this.x);
@@ -2033,59 +2017,47 @@
         diff = Math.atan2(Math.sin(diff), Math.cos(diff));
         this.cannonAngle += diff * 5 * dt;
         
-        if (this.isMachineGunMode) {
-          if (this.shootCooldown <= 0) {
-            const spread = 0.06;
-            const numShots = 2 + Math.floor(this.tier / 2);
-            for (let i = 0; i < numShots; i++) {
-              const shotAngle = this.targetAngle + (Math.random() - 0.5) * spread;
-              const spawnX = this.x + Math.cos(shotAngle) * (this.collisionRadius + 4);
-              const spawnY = this.y + Math.sin(shotAngle) * (this.collisionRadius + 4);
-              
-              fireProjectile({
-                x: spawnX, y: spawnY,
-                angle: shotAngle,
-                damage: this.attackDamage * 0.35,
-                team: this.team,
-                owner: this,
-                radius: 3,
-                speed: 450,
-                range: this.attackRange + 80,
-                color: "#f39c12",
-                isTower: true,
-                isMachineGun: true,
-                tower: true
-              });
-            }
-            this.shootCooldown = this.machineGunCooldown;
-            spawnParticles(this.x + Math.cos(this.targetAngle) * 30, 
-                          this.y + Math.sin(this.targetAngle) * 30, "#f39c12", 2, 15);
+        if (this.shootCooldown <= 0) {
+          let damage = this.attackDamage;
+          if (this.currentTarget === target && this.consecutiveHits > 0) {
+            damage = this.attackDamage * Math.pow(2, this.consecutiveHits);
           }
-        } else {
-          if (this.shootCooldown <= 0) {
-            const spawnX = this.x + Math.cos(this.targetAngle) * (this.collisionRadius + 4);
-            const spawnY = this.y + Math.sin(this.targetAngle) * (this.collisionRadius + 4);
-            
-            fireProjectile({
-              x: spawnX, y: spawnY,
-              angle: this.targetAngle,
-              damage: this.attackDamage,
-              team: this.team,
-              owner: this,
-              radius: 6,
-              speed: 380,
-              range: this.attackRange + 80,
-              color: "#f1c40f",
-              isTower: true,
-              tower: true
-            });
-            this.shootCooldown = 0.8;
-            spawnParticles(spawnX, spawnY, "#f1c40f", 4, 25);
-          }
+          
+          this.shootAt(target, { 
+            radius: 6, 
+            speed: 350, 
+            color: "#f39c12",
+            damage: damage
+          });
+          
+          this.shootCooldown = this.attackCooldown;
+          this.consecutiveHits++;
+          this.currentTarget = target;
         }
       } else {
+        this.consecutiveHits = 0;
         this.currentTarget = null;
       }
+    }
+    shootAt(target, opts) {
+      const angle = Math.atan2(target.y - this.y, target.x - this.x);
+      const damage = opts.damage || this.attackDamage;
+      fireProjectile({
+        x: this.x + Math.cos(angle) * (this.collisionRadius + 4),
+        y: this.y + Math.sin(angle) * (this.collisionRadius + 4),
+        angle: angle,
+        damage: damage,
+        team: this.team,
+        owner: this,
+        radius: (opts && opts.radius) || 4,
+        speed: (opts && opts.speed) || 420,
+        range: this.attackRange + 60,
+        color: (opts && opts.color) || (this.team === "blue" ? "#5ba3f0" : "#ff6b6b"),
+        isPlayer: this.isPlayer,
+        isTower: true,
+        isMachineGun: opts && opts.isMachineGun || false
+      });
+      this.shootCooldown = this.attackCooldown;
     }
     draw() {
       if (!isVisible(this.x, this.y, 80)) return;
@@ -2114,25 +2086,6 @@
       ctx.scale(this.scale, this.scale);
       
       if (this.isAlive()) {
-        const hpPct = this.hp / this.maxHp;
-        const barW = this.bodyWidth * 1.2;
-        const barH = 4;
-        const barY = -this.bodyLength/2 - 12;
-        ctx.save();
-        ctx.fillStyle = "rgba(0,0,0,0.7)";
-        ctx.fillRect(-barW/2 - 1, barY - 1, barW + 2, barH + 2);
-        ctx.fillStyle = hpPct > 0.5 ? "#2ecc71" : hpPct > 0.25 ? "#f1c40f" : "#e74c3c";
-        ctx.fillRect(-barW/2, barY, barW * hpPct, barH);
-        ctx.restore();
-        
-        ctx.save();
-        ctx.fillStyle = "rgba(255,255,255,0.3)";
-        ctx.font = "bold 5px monospace";
-        ctx.textBaseline = "bottom";
-        ctx.textAlign = "center";
-        ctx.fillText(Math.floor(this.hp) + "/" + this.maxHp, 0, barY - 2);
-        ctx.restore();
-        
         if (this.hasShield) {
           ctx.save();
           ctx.globalAlpha = 0.06 + Math.sin(Date.now() / 500) * 0.03;
@@ -2146,19 +2099,6 @@
           ctx.restore();
         }
         
-        if (this.isMachineGunMode) {
-          ctx.save();
-          ctx.globalAlpha = 0.3 + Math.sin(Date.now() / 200) * 0.15;
-          ctx.fillStyle = "#f39c12";
-          ctx.font = "bold 6px monospace";
-          ctx.textAlign = "center";
-          ctx.textBaseline = "bottom";
-          ctx.fillText("⚡AMETRALLADORA", 0, barY - 8);
-          ctx.globalAlpha = 1;
-          ctx.restore();
-        }
-        
-        // BASE REDONDA
         ctx.save();
         ctx.shadowColor = "rgba(0,0,0,0.2)";
         ctx.shadowBlur = 8;
@@ -2189,12 +2129,6 @@
         }
         ctx.restore();
         
-        ctx.strokeStyle = "rgba(200,170,110,0.1)";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(0, 0, 12, 0, Math.PI * 2);
-        ctx.stroke();
-        
         ctx.save();
         ctx.rotate(this.cannonAngle);
         
@@ -2210,8 +2144,8 @@
         ctx.fill();
         ctx.shadowBlur = 0;
         
-        const cannonLen = this.isMachineGunMode ? 14 : 22;
-        const cannonW = this.isMachineGunMode ? 3 : 5;
+        const cannonLen = this.machineGunMode ? 14 : 22;
+        const cannonW = this.machineGunMode ? 3 : 5;
         const cannonGrad = ctx.createLinearGradient(0, -cannonW/2, 0, cannonW/2);
         cannonGrad.addColorStop(0, color3);
         cannonGrad.addColorStop(0.3, color);
@@ -2222,7 +2156,6 @@
         ctx.strokeStyle = "rgba(255,255,255,0.04)";
         ctx.lineWidth = 1;
         ctx.strokeRect(4, -cannonW/2, cannonLen, cannonW);
-        
         ctx.fillStyle = "#2a2a2a";
         ctx.fillRect(4 + cannonLen - 3, -cannonW/2 - 0.5, 3, cannonW + 1);
         
@@ -2232,13 +2165,29 @@
         ctx.font = "bold 7px monospace";
         ctx.textAlign = "center";
         ctx.textBaseline = "bottom";
-        ctx.fillText("Nv" + this.tier + (this.hasShield ? " 🛡️" : ""), 0, barY - 2);
+        ctx.fillText("Nv" + this.tier + (this.hasShield ? " ESCUDO" : ""), 0, -this.bodyLength/2 - 10);
         
         ctx.fillStyle = "rgba(200,170,110,0.1)";
         ctx.font = "5px monospace";
         ctx.textBaseline = "bottom";
         ctx.textAlign = "right";
         ctx.fillText("RNG:" + Math.round(this.attackRange), this.bodyWidth/2 + 4, -this.bodyLength/2 - 2);
+        
+        const hpPct = this.hp / this.maxHp;
+        const barW = 50;
+        const barY = -this.bodyLength/2 - 18;
+        ctx.save();
+        ctx.fillStyle = "rgba(0,0,0,0.7)";
+        ctx.fillRect(-barW/2 - 1, barY - 1, barW + 2, 5);
+        ctx.fillStyle = hpPct > 0.5 ? "#2ecc71" : hpPct > 0.25 ? "#f1c40f" : "#e74c3c";
+        ctx.fillRect(-barW/2, barY, barW * hpPct, 4);
+        ctx.restore();
+        
+        ctx.fillStyle = "rgba(255,255,255,0.5)";
+        ctx.font = "bold 6px monospace";
+        ctx.textBaseline = "bottom";
+        ctx.textAlign = "center";
+        ctx.fillText(Math.floor(this.hp) + "/" + this.maxHp, 0, barY - 2);
         
       } else {
         ctx.globalAlpha = 0.3;
@@ -2253,7 +2202,7 @@
   }
 
   // ============================================================
-  // MINION - SIN ESQUIVAR
+  // MINION
   // ============================================================
   class Minion extends Entity {
     constructor(x, y, team, lane, ranged) {
@@ -2261,7 +2210,7 @@
       this.lane = lane;
       this.ranged = ranged;
       this.collisionRadius = 10;
-      this.level = teamLevelSystem[team].minions.level;
+      this.level = 1;
       this.expValue = 16;
       this.path = lanePathFor(team, lane);
       this.pathIndex = 1;
@@ -2310,7 +2259,6 @@
         }
         return;
       }
-      
       const node = this.path[this.pathIndex];
       if (!node) return;
       if (Math.hypot(node.x - this.x, node.y - this.y) < 40) {
@@ -2356,17 +2304,6 @@
       
       ctx.save();
       ctx.translate(sx, sy);
-      
-      const hpPct = this.hp / this.maxHp;
-      const barW = 18;
-      const barH = 2;
-      const barY = -size - 6;
-      ctx.save();
-      ctx.fillStyle = "rgba(0,0,0,0.5)";
-      ctx.fillRect(-barW/2 - 1, barY - 1, barW + 2, barH + 2);
-      ctx.fillStyle = hpPct > 0.5 ? "#2ecc71" : hpPct > 0.25 ? "#f1c40f" : "#e74c3c";
-      ctx.fillRect(-barW/2, barY, barW * hpPct, barH);
-      ctx.restore();
       
       const grad = ctx.createRadialGradient(0, 0, 2, 0, 0, size + 8);
       grad.addColorStop(0, color + "22");
@@ -2446,7 +2383,25 @@
   }
 
   // ============================================================
-  // TANQUE - SIN ESQUIVAR
+  // FUNCIONES PARA VERIFICAR ALIADOS CERCA DEL NEXO
+  // ============================================================
+  function hasAlliesNearNexus(nexus) {
+    const range = 300;
+    for (const e of entities) {
+      if (e.team === nexus.team && e.isAlive()) {
+        if (e instanceof Tank || e instanceof Minion) {
+          const dist = Math.hypot(e.x - nexus.x, e.y - nexus.y);
+          if (dist < range) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  // ============================================================
+  // TANQUE
   // ============================================================
   class Tank extends Entity {
     constructor(x, y, team, isPlayer, role, lane) {
@@ -2458,7 +2413,7 @@
       this.angle = team === "blue" ? -Math.PI / 4 : (Math.PI * 3) / 4;
       this.cannonAngle = this.angle;
       this.targetAngle = this.angle;
-      this.level = teamLevelSystem[team].tanks.level;
+      this.level = 1;
       this.expValue = 45;
       this.isRespawning = false;
       this.respawnTimer = 0;
@@ -2469,14 +2424,14 @@
       this.path = lanePathFor(team, this.lane);
       this.pathIndex = 1;
       this.spawnPoint = { x, y };
-      this.defending = false;
-      this.aiState = 'patrol';
-      this.stateTimer = 0;
-      this.targetLane = 'mid';
-      this.shopTimer = 0;
-      this.buyingCooldown = 0;
-      this.supportCooldown = 0;
-      this.currentSupportTarget = null;
+      
+      this.individualExp = 0;
+      this.individualLevel = 1;
+      this.individualExpToNext = 80;
+      
+      this.retreating = false;
+      this.retreatTimer = 0;
+      this.cooldownRetreat = 0;
       
       this.isHelicopter = role === "healer";
       this.missileDamage = 30;
@@ -2497,7 +2452,7 @@
       this.roleScale = this.isHelicopter ? 1.0 : (this.role === "tank" ? 1.4 : (this.role === "fast" ? 0.8 : 1.0));
       this.bodyWidth = 32 * this.roleScale;
       this.bodyLength = 40 * this.roleScale;
-      this.trackWidth = (this.role === "fast" ? 8 : (this.role === "tank" ? 20 : 12));
+      this.trackWidth = this.role === "fast" ? 4 : (this.role === "tank" ? 10 : 6);
       
       this.color = this.isPlayer ? "#f0e6d2" : (cfg ? cfg.color : (this.team === "blue" ? "#3498db" : "#e74c3c"));
       this.roleColor = cfg ? cfg.color : null;
@@ -2549,19 +2504,21 @@
       this.isRespawning = true;
       this.respawnTimer = 5 + (this.level - 1) * 1.5;
       this.moveTarget = null;
+      this.retreating = false;
       if (this.isPlayer) updatePlayerStats();
     }
     respawn() {
       const base = this.team === "blue" ? NEXUS_BLUE : NEXUS_RED;
       this.x = base.x + (Math.random() - 0.5) * 70;
       this.y = base.y + (Math.random() - 0.5) * 70;
-      this.level = teamLevelSystem[this.team].tanks.level;
+      this.level = this.individualLevel || 1;
       this.alive = true;
       this.isRespawning = false;
       this.respawnTimer = 0;
       this.path = lanePathFor(this.team, this.lane);
       this.pathIndex = 1;
       this.moveTarget = null;
+      this.retreating = false;
       this.applyStats(false);
       createExplosion(this.x, this.y, this.color, 2);
       if (this.isPlayer) { centerCameraOn(this.x, this.y); updatePlayerStats(); }
@@ -2674,184 +2631,103 @@
       this.rotorAngle += dt * 18;
     }
     
-    // ============================================================
-    // IA DEL HELICÓPTERO - CON ESCAPE FORZADO
-    // ============================================================
-    updateHelicopterAI(dt) {
-      if (!this.isHelicopter || this.isPlayer) return false;
+    checkDangerAndRetreat() {
+      if (this.isPlayer) return false;
+      if (!this.isAlive()) return false;
+      if (this.isRespawning) return false;
       
-      this.stateTimer -= dt;
-      this.buyingCooldown -= dt;
-      this.supportCooldown -= dt;
+      if (this.cooldownRetreat > 0) return false;
       
-      const nexus = getNexusForTeam(this.team);
-      const distToNexus = nexus ? Math.hypot(this.x - nexus.x, this.y - nexus.y) : Infinity;
-      const nexusInDanger = nexus && isNexusInDanger(this.team);
+      let enemyCount = 0;
+      let lowestHpAlly = this.hp / this.maxHp;
+      let hasAllyNear = false;
       
-      // ==========================================================
-      // 0. ESCAPE FORZADO - PRIORIDAD MÁXIMA
-      // ==========================================================
-      if (distToNexus < 220 && !nexusInDanger && this.aiState !== 'defend') {
-        if (this.moveTarget && distToNexus > 120) {
-          const distToTarget = Math.hypot(this.moveTarget.x - this.x, this.moveTarget.y - this.y);
-          if (distToTarget > 50) {
-            this.moveStep(this.moveTarget.x, this.moveTarget.y, dt);
-            return true;
+      for (const e of entities) {
+        if (!e.isAlive() || e.team === this.team) continue;
+        if (!(e instanceof Tank) && !(e instanceof Minion)) continue;
+        const dist = Math.hypot(e.x - this.x, e.y - this.y);
+        if (dist < 200) {
+          enemyCount++;
+        }
+      }
+      
+      for (const e of entities) {
+        if (!e.isAlive() || e.team !== this.team) continue;
+        if (e === this) continue;
+        if (!(e instanceof Tank) && !(e instanceof Minion)) continue;
+        const dist = Math.hypot(e.x - this.x, e.y - this.y);
+        if (dist < 180) {
+          hasAllyNear = true;
+          if (e instanceof Tank) {
+            const allyHp = e.hp / e.maxHp;
+            if (allyHp < lowestHpAlly) lowestHpAlly = allyHp;
           }
         }
-        
-        let angle = Math.random() * Math.PI * 2;
-        if (nexus) {
-          const toNexusAngle = Math.atan2(nexus.y - this.y, nexus.x - this.x);
-          const diff = Math.abs(angle - toNexusAngle);
-          if (diff < Math.PI / 3 || diff > Math.PI * 5 / 3) {
-            angle += Math.PI;
-          }
-        }
-        
-        const escapeDist = 500 + Math.random() * 300;
-        this.moveTarget = {
-          x: Math.max(50, Math.min(MAP_W - 50, this.x + Math.cos(angle) * escapeDist)),
-          y: Math.max(50, Math.min(MAP_H - 50, this.y + Math.sin(angle) * escapeDist))
-        };
-        this.aiState = 'escaping';
-        this.stateTimer = 0;
-        this.moveStep(this.moveTarget.x, this.moveTarget.y, dt);
+      }
+      
+      const myHpPct = this.hp / this.maxHp;
+      
+      const isDangerous = myHpPct < 0.30 && enemyCount > 0;
+      const noSupport = !hasAllyNear || lowestHpAlly < 0.25;
+      
+      if (isDangerous && noSupport) {
+        this.retreating = true;
+        this.retreatTimer = 2.5 + Math.random() * 1.5;
         return true;
       }
       
-      if (this.aiState === 'escaping' && distToNexus > 250) {
-        this.aiState = 'patrol';
-        this.stateTimer = 0;
+      if (this.retreating && (myHpPct > 0.55 || (hasAllyNear && enemyCount > 0))) {
+        this.retreating = false;
+        this.retreatTimer = 0;
+        this.cooldownRetreat = 2 + Math.random() * 2;
+        return false;
       }
       
-      // ==========================================================
-      // 1. COMPRAR MEJORAS
-      // ==========================================================
-      if (isNearNexus(this) && this.money >= 150 && distToNexus > 50) {
-        let comprado = false;
-        const upgrades = ['speed', 'speed', 'dmg', 'range', 'hp'];
-        for (const type of upgrades) {
-          if (isUpgradeMaxed(this, type)) continue;
-          const cost = getUpgradeCost(this, type);
-          if (this.money >= cost) {
-            if (buyUpgradeForTank(this, type)) {
-              comprado = true;
-              break;
+      return this.retreating;
+    }
+    
+    moveWithRetreat(dt) {
+      if (this.isPlayer) return false;
+      
+      if (this.retreating) {
+        this.retreatTimer -= dt;
+        if (this.retreatTimer <= 0) {
+          this.retreating = false;
+          this.cooldownRetreat = 3 + Math.random() * 2;
+        }
+      }
+      
+      if (this.cooldownRetreat > 0) {
+        this.cooldownRetreat -= dt;
+      }
+      
+      this.checkDangerAndRetreat();
+      
+      if (this.retreating) {
+        const nexus = getNexusForTeam(this.team);
+        if (nexus && nexus.isAlive()) {
+          const dx = nexus.x - this.x;
+          const dy = nexus.y - this.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist > 20) {
+            const angle = Math.atan2(dy, dx);
+            this.moveStep(this.x + Math.cos(angle) * 80, this.y + Math.sin(angle) * 80, dt);
+          }
+          if (dist < 100) {
+            this.hp = Math.min(this.maxHp, this.hp + this.maxHp * 0.02);
+            if (this.hp > this.maxHp * 0.6) {
+              this.retreating = false;
+              this.retreatTimer = 0;
+              this.cooldownRetreat = 4 + Math.random() * 2;
             }
           }
-        }
-        if (comprado) {
-          this.buyingCooldown = 5 + Math.random() * 3;
-          const angle = Math.random() * Math.PI * 2;
-          const escapeDist = 500 + Math.random() * 300;
-          this.moveTarget = {
-            x: Math.max(50, Math.min(MAP_W - 50, this.x + Math.cos(angle) * escapeDist)),
-            y: Math.max(50, Math.min(MAP_H - 50, this.y + Math.sin(angle) * escapeDist))
-          };
-          this.aiState = 'escaping';
-          this.moveStep(this.moveTarget.x, this.moveTarget.y, dt);
-          return true;
-        }
-      }
-      
-      // ==========================================================
-      // 2. DEFENDER NEXO
-      // ==========================================================
-      if (nexusInDanger && nexus && nexus.isAlive()) {
-        this.aiState = 'defend';
-        if (distToNexus > 200) {
-          this.moveTarget = { x: nexus.x + (Math.random() - 0.5) * 80, y: nexus.y + (Math.random() - 0.5) * 80 };
         } else {
-          let nearestEnemy = null;
-          let minDist = 500;
-          for (const e of entities) {
-            if (!e.isAlive() || e.team === this.team) continue;
-            const d = Math.hypot(e.x - nexus.x, e.y - nexus.y);
-            if (d < minDist) { minDist = d; nearestEnemy = e; }
-          }
-          if (nearestEnemy) {
-            this.moveTarget = { x: nearestEnemy.x, y: nearestEnemy.y };
-            if (this.shootCooldown <= 0) { this.aimAt(nearestEnemy.x, nearestEnemy.y); this.shoot(); }
-          } else {
-            const angle = Math.random() * Math.PI * 2;
-            this.moveTarget = { x: this.x + Math.cos(angle) * 200, y: this.y + Math.sin(angle) * 200 };
+          const node = this.path[Math.max(0, this.pathIndex - 1)];
+          if (node) {
+            this.moveStep(node.x, node.y, dt);
           }
         }
-        if (this.moveTarget) this.moveStep(this.moveTarget.x, this.moveTarget.y, dt);
         return true;
-      }
-      
-      // ==========================================================
-      // 3. DETECTAR ACCIÓN
-      // ==========================================================
-      if (this.aiState !== 'escaping' && this.supportCooldown <= 0 && !nexusInDanger) {
-        let bestCombat = null;
-        let bestScore = -1;
-        
-        for (const e of entities) {
-          if (!e.isAlive() || e.team === this.team) continue;
-          if (!(e instanceof Tank) && !(e instanceof Minion)) continue;
-          
-          const allies = countAlliesNearPosition(e.x, e.y, 250, this.team);
-          const enemies = countEnemiesNearPosition(e.x, e.y, 250, this.team);
-          
-          if (allies > 0 && enemies > 0) {
-            const score = (allies + enemies) * 2 + Math.random();
-            if (score > bestScore) {
-              bestScore = score;
-              bestCombat = { x: e.x, y: e.y };
-            }
-          }
-        }
-        
-        if (bestCombat) {
-          const distToCombat = Math.hypot(bestCombat.x - this.x, bestCombat.y - this.y);
-          if (distToCombat > 80 && distToCombat < 600) {
-            this.aiState = 'support';
-            this.moveTarget = bestCombat;
-            this.supportCooldown = 2 + Math.random() * 2;
-            this.moveStep(this.moveTarget.x, this.moveTarget.y, dt);
-            const target = this.findTarget(this.attackRange + 80);
-            if (target && this.shootCooldown <= 0) {
-              this.aimAt(target.x, target.y);
-              this.shoot();
-            }
-            return true;
-          }
-        }
-      }
-      
-      // ==========================================================
-      // 4. SEGUIR EL CARRIL
-      // ==========================================================
-      if (this.aiState !== 'escaping') {
-        const target = this.findTarget(this.attackRange + 100);
-        if (target) {
-          this.aiState = 'fighting';
-          this.aimAt(target.x, target.y);
-          const dist = Math.hypot(target.x - this.x, target.y - this.y);
-          
-          if (dist > this.attackRange * 0.85) {
-            this.moveStep(target.x, target.y, dt);
-          } else if (dist < this.attackRange * 0.5 && !this.isTank) {
-            this.moveStep(this.x - Math.cos(this.cannonAngle) * 80, 
-                         this.y - Math.sin(this.cannonAngle) * 80, dt);
-          }
-          if (this.shootCooldown <= 0) this.shoot();
-          return true;
-        }
-        
-        const node = this.path[this.pathIndex];
-        if (node) {
-          if (Math.hypot(node.x - this.x, node.y - this.y) < 50 * this.roleScale) {
-            this.pathIndex = Math.min(this.pathIndex + 1, this.path.length - 1);
-          }
-          this.aimAt(node.x, node.y);
-          this.moveStep(node.x, node.y, dt);
-          this.aiState = 'patrol';
-          return true;
-        }
       }
       
       return false;
@@ -2914,36 +2790,7 @@
       }
       if (!this.isAlive()) return;
 
-      if (!this.isPlayer) {
-        const nexus = getNexusForTeam(this.team);
-        if (nexus && nexus.isAlive()) {
-          const distToNexus = Math.hypot(this.x - nexus.x, this.y - nexus.y);
-          const danger = isNexusInDanger(this.team);
-          
-          if (danger && distToNexus > 200) {
-            this.defending = true;
-            this.aiState = 'defend';
-            this.moveTarget = { x: nexus.x + (Math.random() - 0.5) * 80, y: nexus.y + (Math.random() - 0.5) * 80 };
-          } else if (danger && distToNexus <= 200) {
-            this.defending = true;
-            this.aiState = 'defend';
-            let nearestEnemy = null;
-            let minDist = 400;
-            for (const e of entities) {
-              if (!e.isAlive() || e.team === this.team) continue;
-              const d = Math.hypot(e.x - nexus.x, e.y - nexus.y);
-              if (d < minDist) { minDist = d; nearestEnemy = e; }
-            }
-            if (nearestEnemy) this.moveTarget = { x: nearestEnemy.x, y: nearestEnemy.y };
-          } else if (!danger && this.defending) {
-            this.defending = false;
-            this.pathIndex = 1;
-            this.aiState = 'patrol';
-          }
-        }
-      }
-
-      if (!this.isPlayer && this.isAlive() && !this.defending) {
+      if (!this.isPlayer && this.isAlive()) {
         this.shopCooldown -= dt;
         if (this.shopCooldown <= 0) {
           this.shopCooldown = 3 + Math.random() * 2;
@@ -2968,32 +2815,52 @@
         return;
       }
 
-      if (this.isHelicopter) {
-        if (this.updateHelicopterAI(dt)) return;
-      }
-
-      if (this.defending && this.moveTarget) {
-        const dist = Math.hypot(this.moveTarget.x - this.x, this.moveTarget.y - this.y);
-        if (dist < 30) {
-          const nexus = getNexusForTeam(this.team);
-          if (nexus && nexus.isAlive()) {
-            this.moveTarget = { x: nexus.x + (Math.random() - 0.5) * 100, y: nexus.y + (Math.random() - 0.5) * 100 };
-          }
-        }
-        this.aimAt(this.moveTarget.x, this.moveTarget.y);
-        this.moveStep(this.moveTarget.x, this.moveTarget.y, dt);
+      if (this.moveWithRetreat(dt)) {
         const target = this.findTarget(this.attackRange + 50);
-        if (target && this.shootCooldown <= 0) { this.aimAt(target.x, target.y); this.shoot(); }
+        if (target && this.shootCooldown <= 0) {
+          this.aimAt(target.x, target.y);
+          this.shoot();
+        }
         return;
       }
-
+      
+      let hasAllyNear = false;
+      let allyTarget = null;
+      for (const e of entities) {
+        if (!e.isAlive() || e.team !== this.team) continue;
+        if (e === this) continue;
+        if (!(e instanceof Tank)) continue;
+        const dist = Math.hypot(e.x - this.x, e.y - this.y);
+        if (dist < 200) {
+          hasAllyNear = true;
+          if (e.currentTarget && e.currentTarget.isAlive()) {
+            allyTarget = e.currentTarget;
+          }
+        }
+      }
+      
+      if (hasAllyNear && allyTarget && allyTarget.isAlive()) {
+        const distToTarget = Math.hypot(allyTarget.x - this.x, allyTarget.y - this.y);
+        if (distToTarget < this.attackRange + 100) {
+          this.aimAt(allyTarget.x, allyTarget.y);
+          if (distToTarget > this.attackRange * 0.85) {
+            this.moveStep(allyTarget.x, allyTarget.y, dt);
+          }
+          if (this.shootCooldown <= 0) this.shoot();
+          return;
+        }
+      }
+      
       const target = this.findTarget(this.attackRange + 50);
       if (target) {
         this.aimAt(target.x, target.y);
         const dist = Math.hypot(target.x - this.x, target.y - this.y);
-        if (dist > this.attackRange * 0.85) { this.moveStep(target.x, target.y, dt); }
-        else if (dist < this.attackRange * 0.5 && !this.isTank && !this.isHelicopter) {
-          this.moveStep(this.x - Math.cos(this.cannonAngle) * 80, this.y - Math.sin(this.cannonAngle) * 80, dt);
+        
+        if (dist > this.attackRange * 0.85) {
+          this.moveStep(target.x, target.y, dt);
+        } else if (dist < this.attackRange * 0.5 && !this.isTank && !this.isHelicopter) {
+          this.moveStep(this.x - Math.cos(this.cannonAngle) * 80, 
+                       this.y - Math.sin(this.cannonAngle) * 80, dt);
         }
         if (this.shootCooldown <= 0) this.shoot();
         return;
@@ -3019,6 +2886,7 @@
         else this.moveStep(this.moveTarget.x, this.moveTarget.y, dt);
       }
       if (mouseDown) this.shoot();
+      
       updateShopVisibility();
     }
     draw() {
@@ -3041,28 +2909,32 @@
         ctx.restore();
         
         ctx.save();
-        let stateColor = "#f1c40f";
-        let stateText = "🚁 PATRULLANDO";
-        if (this.aiState === 'defend') { stateColor = "#e74c3c"; stateText = "🛡️ DEFENDIENDO"; }
-        else if (this.aiState === 'support') { stateColor = "#2ecc71"; stateText = "⚔️ APOYANDO"; }
-        else if (this.aiState === 'fighting') { stateColor = "#f1c40f"; stateText = "🔥 COMBATIENDO"; }
-        else if (this.aiState === 'escaping') { stateColor = "#f1c40f"; stateText = "🏃 ESCAPANDO"; }
-        ctx.fillStyle = stateColor;
-        ctx.globalAlpha = 0.7 + Math.sin(Date.now() / 300) * 0.2;
-        ctx.font = "bold 7px monospace";
+        ctx.fillStyle = "#f1c40f";
+        ctx.font = "bold 8px monospace";
         ctx.textAlign = "center";
         ctx.textBaseline = "bottom";
-        ctx.fillText(stateText, sx, sy - 34);
-        ctx.globalAlpha = 1;
+        ctx.fillText("Lv" + (this.individualLevel || this.level), sx, sy - 36);
         ctx.restore();
         
+        const expPct = this.individualExp / this.individualExpToNext;
         ctx.save();
-        ctx.fillStyle = "#c8aa6e";
-        ctx.font = "bold 9px monospace";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "bottom";
-        ctx.fillText("Nv" + this.level, sx, sy - 48);
+        ctx.fillStyle = "rgba(0,0,0,0.5)";
+        ctx.fillRect(sx - 25, sy - 48, 50, 3);
+        ctx.fillStyle = "rgba(241,196,15,0.6)";
+        ctx.fillRect(sx - 25, sy - 48, 50 * Math.min(1, expPct), 3);
         ctx.restore();
+        
+        if (this.retreating) {
+          ctx.save();
+          ctx.fillStyle = "#e74c3c";
+          ctx.globalAlpha = 0.7 + Math.sin(Date.now() / 200) * 0.3;
+          ctx.font = "bold 7px monospace";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "bottom";
+          ctx.fillText("⚠️ RETIRADA", sx, sy - 34);
+          ctx.globalAlpha = 1;
+          ctx.restore();
+        }
         
         if (this.isPlayer) {
           ctx.save();
@@ -3087,6 +2959,7 @@
           ctx.fillText("" + Math.floor(this.money || 0), sx, sy + 30);
           ctx.restore();
         }
+        
         return;
       }
 
@@ -3105,14 +2978,30 @@
       ctx.fillRect(-barW/2, barY2, barW * hpPct, barH);
       ctx.restore();
       
-      if (this.defending) {
+      ctx.save();
+      ctx.fillStyle = "#f1c40f";
+      ctx.font = "bold " + (7 * this.roleScale) + "px monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "bottom";
+      ctx.fillText("Lv" + (this.individualLevel || this.level), 0, barY2 - 2);
+      ctx.restore();
+      
+      const expPct = this.individualExp / this.individualExpToNext;
+      ctx.save();
+      ctx.fillStyle = "rgba(0,0,0,0.5)";
+      ctx.fillRect(-20, barY2 - 8, 40, 3);
+      ctx.fillStyle = "rgba(241,196,15,0.6)";
+      ctx.fillRect(-20, barY2 - 8, 40 * Math.min(1, expPct), 3);
+      ctx.restore();
+      
+      if (this.retreating) {
         ctx.save();
         ctx.fillStyle = "#e74c3c";
-        ctx.globalAlpha = 0.5 + Math.sin(Date.now() / 200) * 0.3;
+        ctx.globalAlpha = 0.7 + Math.sin(Date.now() / 200) * 0.3;
         ctx.font = "bold 7px monospace";
         ctx.textAlign = "center";
         ctx.textBaseline = "bottom";
-        ctx.fillText("🛡️ DEFENDIENDO", 0, barY2 - 6);
+        ctx.fillText("⚠️ RETIRADA", 0, barY2 - 6);
         ctx.globalAlpha = 1;
         ctx.restore();
       }
@@ -3124,7 +3013,7 @@
         ctx.font = "bold " + (8 * this.roleScale) + "px monospace";
         ctx.textAlign = "center";
         ctx.textBaseline = "bottom";
-        ctx.fillText(this.roleName, 0, barY2 - (this.defending ? 14 : 6));
+        ctx.fillText(this.roleName, 0, barY2 - (this.retreating ? 14 : 6));
         ctx.restore();
       }
       
@@ -3297,10 +3186,10 @@
       ctx.restore();
       
       ctx.fillStyle = "#c8aa6e";
-      ctx.font = "bold " + (7 * this.roleScale) + "px monospace";
+      ctx.font = "bold " + (6 * this.roleScale) + "px monospace";
       ctx.textAlign = "center";
       ctx.textBaseline = "bottom";
-      ctx.fillText("Nv" + this.level, 0, barY2 - 2);
+      ctx.fillText("EXP: " + Math.floor(this.individualExp) + "/" + this.individualExpToNext, 0, barY2 - 14);
       
       if (this.isPlayer) {
         ctx.fillStyle = "#2ecc71";
@@ -3330,7 +3219,7 @@
   const TEAM_COLOR = { blue: "#3498db", red: "#e74c3c" };
 
   // ============================================================
-  // SPAWNS - HELICÓPTEROS NACEN FUERA DEL NEXO
+  // SPAWNS
   // ============================================================
   function getRandomRole() {
     const roles = ['healer', 'strong', 'double', 'tank', 'fast'];
@@ -3342,15 +3231,8 @@
       const e = entities[i];
       if (e instanceof Tank && e.team === team && !e.isPlayer) entities.splice(i, 1);
     }
-    
     const base = team === "blue" ? NEXUS_BLUE : NEXUS_RED;
-    
-    let rolesToSpawn;
-    if (team === playerTeam) {
-      rolesToSpawn = ROLE_KEYS.filter(r => r !== playerTank?.role);
-    } else {
-      rolesToSpawn = ROLE_KEYS.filter(r => r !== playerTank?.role);
-    }
+    const rolesToSpawn = ROLE_KEYS.filter(r => r !== playerTank?.role);
     
     if (!rolesToSpawn.includes('healer') && playerTank?.role !== 'healer') {
       if (rolesToSpawn.length > 0) {
@@ -3374,15 +3256,12 @@
       const role = rolesToSpawn[i];
       const lane = LANES[i % LANES.length];
       
-      // POSICIÓN: 100px FUERA del nexo en dirección al campo de batalla
       let spawnX, spawnY;
       if (team === "blue") {
-        // Azul: spawn hacia la derecha y arriba (hacia el centro)
         const angle = -Math.PI / 4 + (Math.random() - 0.5) * 0.5;
         spawnX = base.x + Math.cos(angle) * 100 + (Math.random() - 0.5) * 30;
         spawnY = base.y + Math.sin(angle) * 100 + (Math.random() - 0.5) * 30;
       } else {
-        // Rojo: spawn hacia la izquierda y abajo (hacia el centro)
         const angle = Math.PI * 3 / 4 + (Math.random() - 0.5) * 0.5;
         spawnX = base.x + Math.cos(angle) * 100 + (Math.random() - 0.5) * 30;
         spawnY = base.y + Math.sin(angle) * 100 + (Math.random() - 0.5) * 30;
@@ -3549,10 +3428,13 @@
     el.deaths.textContent = playerTank.deaths || 0;
     el.money.textContent = Math.floor(playerTank.money || 0);
 
-    const data = teamLevelSystem[playerTeam].tanks;
-    el.level.textContent = data.level;
-    el.expFill.style.width = Math.min(100, (data.exp / data.expToNext) * 100) + "%";
-    el.expText.textContent = Math.floor(data.exp) + "/" + data.expToNext;
+    const level = playerTank.individualLevel || 1;
+    el.level.textContent = level;
+    
+    const exp = playerTank.individualExp || 0;
+    const expToNext = playerTank.individualExpToNext || 80;
+    el.expFill.style.width = Math.min(100, (exp / expToNext) * 100) + "%";
+    el.expText.textContent = Math.floor(exp) + "/" + expToNext;
     
     updateHpBars();
   }
@@ -3705,9 +3587,11 @@
     drawNexusWalls();
     drawTracks();
     
-    // ORDEN DE DIBUJO
     for (const e of entities) {
       if (e instanceof Tank && !e.isHelicopter) e.draw();
+    }
+    for (const e of entities) {
+      if (e instanceof Nexus) e.draw();
     }
     for (const e of entities) {
       if (e instanceof Tower) e.draw();
@@ -3717,9 +3601,6 @@
     }
     for (const e of entities) {
       if (e instanceof Tank && e.isHelicopter) e.draw();
-    }
-    for (const e of entities) {
-      if (e instanceof Nexus) e.draw();
     }
     
     drawProjectiles();
